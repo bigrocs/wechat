@@ -19,7 +19,7 @@ func (c *CommonUrl)Url() (url string, err error) {
 	case "miniprogram":
 		// 小程序
 		m := &Miniprogram{c}
-		return m.Url()
+		url, err = m.Url()
 	}
 	return
 }
