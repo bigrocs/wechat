@@ -2,7 +2,4 @@ module github.com/bigrocs/wechat
 
 go 1.12
 
-require (
-	github.com/aliyun/alibaba-cloud-sdk-go v0.0.0-20190620084858-e18d90308057 // indirect
-	github.com/micro/go-micro v1.6.0
-)
+require golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5

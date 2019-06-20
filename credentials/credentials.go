@@ -4,4 +4,5 @@ package credentials
 type BaseCredential struct {
 	AppId  string
 	Secret string
+	MchId string
 }

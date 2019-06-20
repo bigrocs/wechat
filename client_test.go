@@ -13,12 +13,13 @@ func TestCode2Session(t *testing.T) {
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "miniprogram"
-	request.ApiName = "code2Session"
+	request.ApiName = "auth.code2Session"
 	request.QueryParams = map[string]string{
-		"js_code": "js_code",
+		"js_code": "123456",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
+	req := response.GetHttpContentString()
 	fmt.Println(response, err)
-	fmt.Println(client, err)
+	fmt.Println(req, err)
 }

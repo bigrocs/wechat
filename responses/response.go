@@ -16,9 +16,18 @@ package responses
 
 // CommonResponse 公共回应
 type CommonResponse struct {
+	httpContentString string
 }
 
 // NewCommonResponse 创建新的请求返回
 func NewCommonResponse() (response *CommonResponse) {
 	return &CommonResponse{}
+}
+
+func (req *CommonResponse) GetHttpContentString() string {
+	return req.httpContentString
+}
+
+func (req *CommonResponse) SetHttpContentString(httpContentString string)  {
+	req.httpContentString = httpContentString
 }

@@ -3,12 +3,9 @@
 ```
 {
     "Domain": "miniprogram",
-    "ApiName": "code2Session",
+    "ApiName": "auth.code2Session",
     "QueryParams": {
-    	"PhoneNumbers":"13954386521",
-    	"SignName":"微信",
-    	"TemplateCode":"SMS_135275049",
-    	"TemplateParam":"{code: '562374'}"
+    	"js_code":"13954386521"
     }
 }
 ```
