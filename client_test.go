@@ -10,8 +10,8 @@ import (
 func TestCode2Session(t *testing.T) {
 	// 创建连接
 	client, err := NewClient()
-	client.Credential.Miniprogram.AppId = "wx15550c1a89d982c8"
-	client.Credential.Miniprogram.Secret = "f9c11f183a5beb592ccd801298ff5533"
+	client.Credential.Miniprogram.AppId = ""
+	client.Credential.Miniprogram.Secret = ""
 
 	// 配置参数
 	request := requests.NewCommonRequest()
