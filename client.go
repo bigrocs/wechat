@@ -13,15 +13,14 @@ import (
 // Client the type Client
 type Client struct {
 	httpClient *http.Client
-	credential *credentials.BaseCredential
+	Credential *credentials.BaseCredential
 }
 
 // NewClient 创建默认连接
-func NewClient(appId, secret string) (client *Client, err error) {
+func NewClient() (client *Client, err error) {
 	client = &Client{}
-	client.credential = &credentials.BaseCredential{
-		AppId:  appId,
-		Secret: secret,
+	client.Credential = &credentials.BaseCredential{
+		Miniprogram: &credentials.Miniprogram{},
 	}
 	err = nil
 	return
@@ -35,24 +34,25 @@ func (client *Client) ProcessCommonRequest(request *requests.CommonRequest) (res
 }
 
 // DoAction 执行动作
-func (client *Client) DoAction(request *requests.CommonRequest,response *responses.CommonResponse)( err error){
+func (client *Client) DoAction(request *requests.CommonRequest, response *responses.CommonResponse) (err error) {
 	// 创建访问链接
 	u := &url.CommonUrl{
-		Credential: client.credential,
-		Requests: request,
+		Credential: client.Credential,
+		Requests:   request,
 	}
 	url, err := u.Url()
 	if err != nil {
 		return err
 	}
-	err = client.HTTPGet(url,response)
+	err = client.HTTPGet(url, response)
 	if err != nil {
 		return err
 	}
 	return
 }
 
-func (client *Client) HTTPGet(url string, response *responses.CommonResponse) (err error){
+// HTTPGet 请求
+func (client *Client) HTTPGet(url string, response *responses.CommonResponse) (err error) {
 	res, err := util.HTTPGet(url)
 	response.SetHttpContentString(string(res))
 	return
