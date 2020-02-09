@@ -1,5 +1,8 @@
 module github.com/bigrocs/wechat
 
-go 1.12
+go 1.13
 
-require golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
+require (
+	github.com/clbanning/mxj v1.8.4
+	golang.org/x/crypto v0.0.0-20200208060501-ecb85df21340
+)

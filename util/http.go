@@ -7,13 +7,15 @@ import (
 	"encoding/pem"
 	"encoding/xml"
 	"fmt"
-	"golang.org/x/crypto/pkcs12"
 	"io"
 	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
+
+	"github.com/clbanning/mxj"
+	"golang.org/x/crypto/pkcs12"
 )
 
 //HTTPGet get 请求
@@ -153,8 +155,12 @@ func PostMultipartForm(fields []MultipartFormField, uri string) (respBody []byte
 }
 
 //PostXML perform a HTTP/POST request with XML body
-func PostXML(uri string, obj interface{}) ([]byte, error) {
-	xmlData, err := xml.Marshal(obj)
+func PostXML(uri string, obj map[string]string) ([]byte, error) {
+	mv := mxj.Map{}
+	for key, value := range obj {
+		mv[key] = value
+	}
+	xmlData, err := mv.Xml()
 	if err != nil {
 		return nil, err
 	}

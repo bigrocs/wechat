@@ -28,6 +28,6 @@ func (req *CommonResponse) GetHttpContentString() string {
 	return req.httpContentString
 }
 
-func (req *CommonResponse) SetHttpContentString(httpContentString string)  {
+func (req *CommonResponse) SetHttpContentString(httpContentString string) {
 	req.httpContentString = httpContentString
 }
