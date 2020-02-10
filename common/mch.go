@@ -30,16 +30,32 @@ func (m *Mch) ApiUrl() (apiUrl string, err error) {
 
 // Request 执行请求
 func (m *Mch) Request(response *responses.CommonResponse) (err error) {
+	c := m.c.Config
 	req := m.c.Requests
 	apiUrl, err := m.ApiUrl()
-	queryParams := req.QueryParams
+	// 构建配置参数
+	if _, ok := req.QueryParams["app_id"]; !ok {
+		req.QueryParams["app_id"] = c.AppId
+	}
+	if _, ok := req.QueryParams["mch_id"]; !ok {
+		req.QueryParams["mch_id"] = c.MchId
+	}
+	if _, ok := req.QueryParams["api_key"]; !ok {
+		req.QueryParams["api_key"] = c.ApiKey
+	}
+	if _, ok := req.QueryParams["sub_app_id"]; !ok {
+		req.QueryParams["sub_app_id"] = c.SubAppId
+	}
+	if _, ok := req.QueryParams["sub_mch_id"]; !ok {
+		req.QueryParams["sub_mch_id"] = c.SubMchId
+	}
 	if err != nil {
 		return err
 	}
-	res, err := util.PostXML(apiUrl, queryParams)
+	res, err := util.PostXML(apiUrl, req.QueryParams)
 	if err != nil {
 		return err
 	}
-	response.SetHttpContentString(string(res))
+	response.SetHttpContent(res, "xml")
 	return
 }

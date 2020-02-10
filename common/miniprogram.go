@@ -46,6 +46,6 @@ func (m *Miniprogram) Request(response *responses.CommonResponse) (err error) {
 	if err != nil {
 		return err
 	}
-	response.SetHttpContentString(string(res))
+	response.SetHttpContent(res, "string")
 	return
 }

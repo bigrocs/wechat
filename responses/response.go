@@ -14,9 +14,16 @@
 
 package responses
 
+import (
+	"encoding/json"
+
+	"github.com/clbanning/mxj"
+)
+
 // CommonResponse 公共回应
 type CommonResponse struct {
-	httpContentString string
+	httpContent []byte
+	dataType    string
 }
 
 // NewCommonResponse 创建新的请求返回
@@ -24,10 +31,25 @@ func NewCommonResponse() (response *CommonResponse) {
 	return &CommonResponse{}
 }
 
-func (req *CommonResponse) GetHttpContentString() string {
-	return req.httpContentString
+func (req *CommonResponse) GetHttpContent() string {
+	switch req.dataType {
+	case "xml":
+		mv, _ := mxj.NewMapXml(req.httpContent) // unmarshal
+		var str interface{}
+		if _, ok := mv["xml"]; ok { //去掉 xml 外层
+			str = mv["xml"]
+		} else {
+			str = mv
+		}
+		jsonStr, _ := json.Marshal(str)
+		return string(jsonStr)
+	case "string":
+		return string(req.httpContent)
+	}
+	return ""
 }
 
-func (req *CommonResponse) SetHttpContentString(httpContentString string) {
-	req.httpContentString = httpContentString
+func (req *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
+	req.httpContent = httpContent
+	req.dataType = dataType
 }

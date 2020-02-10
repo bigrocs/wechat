@@ -22,7 +22,7 @@ func TestCode2Session(t *testing.T) {
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
-	req := response.GetHttpContentString()
+	req := response.GetHttpContent()
 	t.Log(response, err)
 	t.Log(req, err)
 }
@@ -30,8 +30,11 @@ func TestCode2Session(t *testing.T) {
 func TestMchPayMicropay(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = ""
-	client.Config.Secret = ""
+	client.Config.AppId = "wxa4153f8d32d318f7"
+	client.Config.MchId = "1509529271"
+	client.Config.ApiKey = "4e47dc947158b67891381b6a14220d5f"
+	client.Config.SubAppId = "wx48dc842d5284028c"
+	client.Config.SubMchId = "1536451431"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
@@ -42,7 +45,7 @@ func TestMchPayMicropay(t *testing.T) {
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
-	req := response.GetHttpContentString()
+	req := response.GetHttpContent()
 	fmt.Println(response, err)
 	fmt.Println(req, err)
 }
