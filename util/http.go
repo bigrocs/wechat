@@ -164,7 +164,6 @@ func PostXML(uri string, obj map[string]string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	body := bytes.NewBuffer(xmlData)
 	response, err := http.Post(uri, "application/xml;charset=utf-8", body)
 	if err != nil {
