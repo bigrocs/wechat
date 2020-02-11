@@ -1,4 +1,4 @@
-package sdk
+package wechat
 
 import (
 	"github.com/bigrocs/wechat/common"
