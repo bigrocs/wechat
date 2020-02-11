@@ -10,8 +10,8 @@ import (
 func TestCode2Session(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = ""
-	client.Config.Secret = ""
+	client.Config.AppId = "wxa4153f8f32d3r8f7"
+	client.Config.Secret = "4e47dc9471w8b6b891381v6d1422015f"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
@@ -30,18 +30,18 @@ func TestCode2Session(t *testing.T) {
 func TestMchPayMicropay(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wxa4153f8d32d318f7"
-	client.Config.MchId = "1509529271"
-	client.Config.ApiKey = "4e47dc947158b67891381b6a14220d5f"
-	client.Config.SubAppId = "wx48dc842d5284028c"
-	client.Config.SubMchId = "1536451431"
+	client.Config.AppId = "wxa4153f8f32d3r8f7"
+	client.Config.MchId = "1419524271"
+	client.Config.ApiKey = "4e47dc9471w8b6b891381v6d1422015f"
+	client.Config.SubAppId = "wx48dc842f5284028c"
+	client.Config.SubMchId = "1436431421"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.micropay"
 	request.QueryParams = map[string]string{
-		"auth_code":        "134770030975364234",
+		"auth_code":        "134770030978364234",
 		"body":             "测试商品名称1",
 		"out_trade_no":     "202002100007",
 		"total_fee":        "1",
