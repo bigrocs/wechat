@@ -34,21 +34,21 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	req := m.c.Requests
 	apiUrl, err := m.ApiUrl()
 	// 构建配置参数
-	if _, ok := req.QueryParams["app_id"]; !ok {
-		req.QueryParams["app_id"] = c.AppId
+	if _, ok := req.QueryParams["appid"]; !ok {
+		req.QueryParams["appid"] = c.AppId
 	}
 	if _, ok := req.QueryParams["mch_id"]; !ok {
 		req.QueryParams["mch_id"] = c.MchId
 	}
-	if _, ok := req.QueryParams["api_key"]; !ok {
-		req.QueryParams["api_key"] = c.ApiKey
-	}
-	if _, ok := req.QueryParams["sub_app_id"]; !ok {
-		req.QueryParams["sub_app_id"] = c.SubAppId
+	if _, ok := req.QueryParams["sub_appid"]; !ok {
+		req.QueryParams["sub_appid"] = c.SubAppId
 	}
 	if _, ok := req.QueryParams["sub_mch_id"]; !ok {
 		req.QueryParams["sub_mch_id"] = c.SubMchId
 	}
+
+	req.QueryParams["nonce_str"] = util.NonceStr()
+	req.QueryParams["sign"] = util.Sign(req.QueryParams, c.ApiKey, nil)
 	if err != nil {
 		return err
 	}

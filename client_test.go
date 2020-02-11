@@ -41,15 +41,15 @@ func TestMchPayMicropay(t *testing.T) {
 	request.Domain = "mch"
 	request.ApiName = "pay.micropay"
 	request.QueryParams = map[string]string{
-		"auth_code":        "134691952714399472",
-		"body":             "测试商品名称",
-		"out_trade_no":     "202002100006",
+		"auth_code":        "134770030975364234",
+		"body":             "测试商品名称1",
+		"out_trade_no":     "202002100007",
 		"total_fee":        "1",
 		"spbill_create_ip": "127.0.0.1",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
 	req := response.GetHttpContent()
-	fmt.Println(response, err)
+	// fmt.Println(response, err)
 	fmt.Println(req, err)
 }
