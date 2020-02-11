@@ -37,8 +37,3 @@ func (c *Common) APIBaseURL() string { // TODO(): 后期做容灾功能
 func (c *Common) APIBaseURLMch() string { // TODO(): 后期做容灾功能
 	return "https://api.mch.weixin.qq.com"
 }
-
-// 公共请求 解析 xml 使用
-type Response struct {
-	Meta map[string]interface{} `xml:"meta,omitempty"`
-}
