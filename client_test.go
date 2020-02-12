@@ -22,7 +22,7 @@ func TestCode2Session(t *testing.T) {
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
-	req := response.GetHttpContent()
+	req, err := response.GetHttpContentMap()
 	t.Log(response, err)
 	t.Log(req, err)
 }
@@ -49,7 +49,7 @@ func TestMchPayMicropay(t *testing.T) {
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
-	req := response.GetHttpContent()
+	req, err := response.GetHttpContentMap()
 	// fmt.Println(response, err)
 	fmt.Println(req, err)
 }

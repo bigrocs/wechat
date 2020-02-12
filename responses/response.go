@@ -23,7 +23,7 @@ import (
 // CommonResponse 公共回应
 type CommonResponse struct {
 	httpContent []byte
-	dataType    string
+	json        string
 }
 
 // NewCommonResponse 创建新的请求返回
@@ -31,8 +31,20 @@ func NewCommonResponse() (response *CommonResponse) {
 	return &CommonResponse{}
 }
 
-func (req *CommonResponse) GetHttpContent() string {
-	switch req.dataType {
+// GetHttpContentJson 获取 JSON 数据
+func (req *CommonResponse) GetHttpContentJson() string {
+	return req.json
+}
+
+// GetHttpContentMap 获取 MAP 数据
+func (req *CommonResponse) GetHttpContentMap() (mxj.Map, error) {
+	return mxj.NewMapJson([]byte(req.json))
+}
+
+// SetHttpContent 设置请求信息
+func (req *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
+	req.httpContent = httpContent
+	switch dataType {
 	case "xml":
 		mv, _ := mxj.NewMapXml(req.httpContent) // unmarshal
 		var str interface{}
@@ -42,14 +54,8 @@ func (req *CommonResponse) GetHttpContent() string {
 			str = mv
 		}
 		jsonStr, _ := json.Marshal(str)
-		return string(jsonStr)
+		req.json = string(jsonStr)
 	case "string":
-		return string(req.httpContent)
+		req.json = string(req.httpContent)
 	}
-	return ""
-}
-
-func (req *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
-	req.httpContent = httpContent
-	req.dataType = dataType
 }
