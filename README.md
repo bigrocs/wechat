@@ -17,7 +17,7 @@
     "Domain": "mch",
     "ApiName": "pay.micropay",
     "QueryParams": {
-    	"auth_code":"134770030978364234",
+    	"auth_code":        "134770030978364234",
         "body":             "测试商品名称1",
 		"out_trade_no":     "202002100007",
 		"total_fee":        "1",
