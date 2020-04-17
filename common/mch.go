@@ -48,7 +48,7 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	}
 
 	req.QueryParams["nonce_str"] = util.NonceStr()
-	req.QueryParams["sign"] = util.Sign(req.QueryParams, c.ApiKey, nil)
+	req.QueryParams["sign"] = util.Sign(req.QueryParams, c.ApiKey, util.SignType_MD5)
 	if err != nil {
 		return err
 	}

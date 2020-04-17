@@ -16,13 +16,29 @@ const (
 	SignType_HMAC_SHA256 = "HMAC-SHA256"
 )
 
+// VerifySign 验证支付
+func VerifySign(params map[string]string, apiKey string, signType string) bool {
+	bodySign := params["sign"]
+	sign := util.Sign(params, apiKey, signType)
+	return bodySign == sign
+}
+
 // Sign 微信支付签名.
 //  params: 待签名的参数集合
 //  apiKey: api密钥
 //  fn:     func() hash.Hash, 如果为 nil 则默认用 md5.New
-func Sign(params map[string]string, apiKey string, fn func() hash.Hash) string {
-	if fn == nil {
-		fn = md5.New
+func Sign(params map[string]string, apiKey string, signType string) string {
+	if signType == "" {
+		signType = SignType_MD5
+	}
+	var h hash.Hash
+	switch signType {
+	case SignType_MD5:
+		h = md5.New()
+	case SignType_SHA1:
+		h = sha1.New()
+	default:
+		panic("unsupported signType")
 	}
 	return Sign2(params, apiKey, fn())
 }
