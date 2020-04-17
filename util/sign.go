@@ -19,7 +19,7 @@ const (
 // VerifySign 验证支付
 func VerifySign(params map[string]string, apiKey string, signType string) bool {
 	bodySign := params["sign"]
-	sign := util.Sign(params, apiKey, signType)
+	sign := Sign(params, apiKey, signType)
 	return bodySign == sign
 }
 
@@ -40,7 +40,7 @@ func Sign(params map[string]string, apiKey string, signType string) string {
 	default:
 		panic("unsupported signType")
 	}
-	return Sign2(params, apiKey, fn())
+	return Sign2(params, apiKey, h)
 }
 
 // Sign2 微信支付签名.
