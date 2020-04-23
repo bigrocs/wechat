@@ -155,11 +155,8 @@ func PostMultipartForm(fields []MultipartFormField, uri string) (respBody []byte
 }
 
 //PostXML perform a HTTP/POST request with XML body
-func PostXML(uri string, obj map[string]string) ([]byte, error) {
-	mv := mxj.Map{}
-	for key, value := range obj {
-		mv[key] = value
-	}
+func PostXML(uri string, obj map[string]interface{}) ([]byte, error) {
+	mv := mxj.Map(obj)
 	xmlData, err := mv.Xml()
 	if err != nil {
 		return nil, err

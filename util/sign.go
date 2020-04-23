@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"hash"
 	"sort"
+	"strconv"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 )
 
 // VerifySign 验证支付
-func VerifySign(params map[string]string, apiKey string, signType string) bool {
+func VerifySign(params map[string]interface{}, apiKey string, signType string) bool {
 	bodySign := params["sign"]
 	sign := Sign(params, apiKey, signType)
 	return bodySign == sign
@@ -27,7 +28,7 @@ func VerifySign(params map[string]string, apiKey string, signType string) bool {
 //  params: 待签名的参数集合
 //  apiKey: api密钥
 //  fn:     func() hash.Hash, 如果为 nil 则默认用 md5.New
-func Sign(params map[string]string, apiKey string, signType string) string {
+func Sign(params map[string]interface{}, apiKey string, signType string) string {
 	if signType == "" {
 		signType = SignType_MD5
 	}
@@ -47,7 +48,7 @@ func Sign(params map[string]string, apiKey string, signType string) string {
 //  params: 待签名的参数集合
 //  apiKey: api密钥
 //  h:      hash.Hash, 如果为 nil 则默认用 md5.New(), 特别注意 h 必须是 initial state.
-func Sign2(params map[string]string, apiKey string, h hash.Hash) string {
+func Sign2(params map[string]interface{}, apiKey string, h hash.Hash) string {
 	if h == nil {
 		h = md5.New()
 	}
@@ -69,7 +70,7 @@ func Sign2(params map[string]string, apiKey string, h hash.Hash) string {
 		}
 		bufw.WriteString(k)
 		bufw.WriteByte('=')
-		bufw.WriteString(v)
+		bufw.WriteString(InterfaceToString(v))
 		bufw.WriteByte('&')
 	}
 	bufw.WriteString("key=")
@@ -79,6 +80,23 @@ func Sign2(params map[string]string, apiKey string, h hash.Hash) string {
 	signature := make([]byte, hex.EncodedLen(h.Size()))
 	hex.Encode(signature, h.Sum(nil))
 	return string(bytes.ToUpper(signature))
+}
+
+// ParseNotifyResult 解析异步通知
+func InterfaceToString(v interface{}) string {
+	switch v.(type) {
+	case string:
+		return v.(string)
+	case int:
+		return strconv.Itoa(v.(int))
+	case int64:
+		return strconv.FormatInt(v.(int64), 10)
+	case float32:
+		return strconv.FormatFloat(v.(float64), 'E', -1, 32)
+	case float64:
+		return strconv.FormatFloat(v.(float64), 'E', -1, 64)
+	}
+	return ""
 }
 
 // jssdk 支付签名, signType 只支持 "MD5", "SHA1", 传入其他的值会 panic.

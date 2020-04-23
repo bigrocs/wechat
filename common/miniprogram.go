@@ -28,7 +28,7 @@ func (m *Miniprogram) ApiUrl() (apiUrl string, err error) {
 		apiUrl = strings.Replace(u, "{appid}", c.AppId, -1)
 		apiUrl = strings.Replace(apiUrl, "{secret}", c.Secret, -1)
 		for key, val := range req.QueryParams {
-			apiUrl = apiUrl + "&" + key + "=" + val
+			apiUrl = apiUrl + "&" + key + "=" + util.InterfaceToString(val)
 		}
 	} else {
 		err = fmt.Errorf("ApiName 不存在请检查。")

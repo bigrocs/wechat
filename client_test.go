@@ -17,7 +17,7 @@ func TestCode2Session(t *testing.T) {
 	request := requests.NewCommonRequest()
 	request.Domain = "miniprogram"
 	request.ApiName = "auth.code2Session"
-	request.QueryParams = map[string]string{
+	request.QueryParams = map[string]interface{}{
 		"js_code": "0211MY2j255VoB0WKO3j2cqJ2j21MY2s",
 	}
 	// 请求
@@ -40,7 +40,7 @@ func TestMchPayMicropay(t *testing.T) {
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.micropay"
-	request.QueryParams = map[string]string{
+	request.QueryParams = map[string]interface{}{
 		"auth_code":        "134770030978364234",
 		"body":             "测试商品名称1",
 		"out_trade_no":     "202002100007",
