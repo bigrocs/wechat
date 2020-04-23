@@ -26,7 +26,7 @@ type CommonResponse struct {
 	json        string
 }
 
-type Map mxj.Map
+type Map *mxj.Map
 
 // NewCommonResponse 创建新的请求返回
 func NewCommonResponse() (response *CommonResponse) {
