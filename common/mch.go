@@ -9,7 +9,8 @@ import (
 )
 
 var apiUrlsMch = map[string]string{
-	"pay.micropay": "/pay/micropay", //付款码支付
+	"pay.micropay":   "/pay/micropay",   //付款码支付
+	"pay.orderquery": "/pay/orderquery", //付款码支付查询
 }
 
 // Mch 公共封装
