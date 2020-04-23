@@ -10,15 +10,15 @@ import (
 func TestCode2Session(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wxa4153f8f32d3r8f7"
-	client.Config.Secret = "4e47dc9471w8b6b891381v6d1422015f"
+	client.Config.AppId = "wxa4153f8f312d3r8f7"
+	client.Config.Secret = "4e47dc9471w8b16b891381v6d1422015f"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "miniprogram"
 	request.ApiName = "auth.code2Session"
 	request.QueryParams = map[string]interface{}{
-		"js_code": "0211MY2j255VoB0WKO3j2cqJ2j21MY2s",
+		"js_code": "0211MY2j255Vo1B0WKO3j2cqJ2j21MY2s",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
@@ -30,11 +30,11 @@ func TestCode2Session(t *testing.T) {
 func TestMchPayMicropay(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wxa4153f8f32d3r8f7"
-	client.Config.MchId = "1419524271"
-	client.Config.ApiKey = "4e47dc9471w8b6b891381v6d1422015f"
-	client.Config.SubAppId = "wx48dc842f5284028c"
-	client.Config.SubMchId = "1436431421"
+	client.Config.AppId = "wxa4153f8f32d13r8f7"
+	client.Config.MchId = "14195241271"
+	client.Config.ApiKey = "4e47dc9471w8b6b8191381v6d1422015f"
+	client.Config.SubAppId = "wx48dc842f51284028c"
+	client.Config.SubMchId = "14364311421"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
