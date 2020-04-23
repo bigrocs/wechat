@@ -24,8 +24,9 @@ import (
 type CommonResponse struct {
 	httpContent []byte
 	json        string
-	Map         *mxj.Map
 }
+
+type Map *mxj.Map
 
 // NewCommonResponse 创建新的请求返回
 func NewCommonResponse() (response *CommonResponse) {
@@ -38,7 +39,7 @@ func (req *CommonResponse) GetHttpContentJson() string {
 }
 
 // GetHttpContentMap 获取 MAP 数据
-func (req *CommonResponse) GetHttpContentMap() (CommonResponse.Map, error) {
+func (req *CommonResponse) GetHttpContentMap() (mxj.Map, error) {
 	return mxj.NewMapJson([]byte(req.json))
 }
 
