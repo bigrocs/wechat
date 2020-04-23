@@ -25,5 +25,15 @@
     }
 }
 ```
+#### 微信付款码支付查询
+```
+{
+    "Domain": "mch",
+    "ApiName": "pay.orderquery",
+    "QueryParams": {
+		"out_trade_no":     "202002100007",
+    }
+}
+```
 - 具体参数参考微信开发文档
 - https://api.wechat.com/
