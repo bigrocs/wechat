@@ -7,4 +7,5 @@ type Config struct {
 	SubAppId string // 子商户公众账号AppId
 	SubMchId string // 子商户号
 	Secret   string
+	CA       string // 双向证书
 }

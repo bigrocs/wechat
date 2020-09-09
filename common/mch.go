@@ -9,8 +9,11 @@ import (
 )
 
 var apiUrlsMch = map[string]string{
-	"pay.micropay":   "/pay/micropay",   //付款码支付
-	"pay.orderquery": "/pay/orderquery", //付款码支付查询
+	"pay.micropay":    "/pay/micropay",       //付款码支付
+	"pay.orderquery":  "/pay/orderquery",     //付款码支付查询
+	"pay.reverse":     "/secapi/pay/reverse", //付款码支付撤销订单
+	"pay.refund":      "/secapi/pay/refund",  //付款码支付申请退款
+	"pay.refundquery": "/pay/refundquery",    //付款码支付查询退款
 }
 
 // Mch 公共封装
@@ -47,13 +50,17 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	if _, ok := req.QueryParams["sub_mch_id"]; !ok {
 		req.QueryParams["sub_mch_id"] = c.SubMchId
 	}
-
 	req.QueryParams["nonce_str"] = util.NonceStr()
 	req.QueryParams["sign"] = util.Sign(req.QueryParams, c.ApiKey, util.SignType_MD5)
 	if err != nil {
 		return err
 	}
-	res, err := util.PostXML(apiUrl, req.QueryParams)
+	var res []byte
+	if req.ApiName == "pay.reverse" || req.ApiName == "pay.refund" { //  判断是否使用证书
+		res, err = util.PostXMLWithTLS(apiUrl, req.QueryParams, c.CA, req.QueryParams["mch_id"].(string))
+	} else {
+		res, err = util.PostXML(apiUrl, req.QueryParams)
+	}
 	if err != nil {
 		return err
 	}

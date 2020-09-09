@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"encoding/pem"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -174,14 +173,35 @@ func PostXML(uri string, obj map[string]interface{}) ([]byte, error) {
 	return ioutil.ReadAll(response.Body)
 }
 
+// httpWithTLS CA证书
+// func httpWithTLS(rootCa, key string) (*http.Client, error) {
+// 	var client *http.Client
+// 	certData, err := ioutil.ReadFile(rootCa)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("unable to find cert path=%s, error=%v", rootCa, err)
+// 	}
+// 	cert := pkcs12ToPem(certData, key)
+// 	config := &tls.Config{
+// 		Certificates: []tls.Certificate{cert},
+// 	}
+// 	tr := &http.Transport{
+// 		TLSClientConfig:    config,
+// 		DisableCompression: true,
+// 	}
+// 	client = &http.Client{Transport: tr}
+// 	return client, nil
+// }
+
 //httpWithTLS CA证书
-func httpWithTLS(rootCa, key string) (*http.Client, error) {
-	var client *http.Client
+func httpWithTLS(rootCa, key string) (client *http.Client, err error) {
 	certData, err := ioutil.ReadFile(rootCa)
 	if err != nil {
 		return nil, fmt.Errorf("unable to find cert path=%s, error=%v", rootCa, err)
 	}
-	cert := pkcs12ToPem(certData, key)
+	cert, err := pkcs12ToPem(certData, key)
+	if err != nil {
+		return client, err
+	}
 	config := &tls.Config{
 		Certificates: []tls.Certificate{cert},
 	}
@@ -189,12 +209,13 @@ func httpWithTLS(rootCa, key string) (*http.Client, error) {
 		TLSClientConfig:    config,
 		DisableCompression: true,
 	}
+
 	client = &http.Client{Transport: tr}
-	return client, nil
+	return client, err
 }
 
 //pkcs12ToPem 将Pkcs12转成Pem
-func pkcs12ToPem(p12 []byte, password string) tls.Certificate {
+func pkcs12ToPem(p12 []byte, password string) (cert tls.Certificate, err error) {
 	blocks, err := pkcs12.ToPEM(p12, password)
 	defer func() {
 		if x := recover(); x != nil {
@@ -202,27 +223,29 @@ func pkcs12ToPem(p12 []byte, password string) tls.Certificate {
 		}
 	}()
 	if err != nil {
-		panic(err)
+		return cert, err
 	}
 	var pemData []byte
 	for _, b := range blocks {
 		pemData = append(pemData, pem.EncodeToMemory(b)...)
+		fmt.Println(string(pem.EncodeToMemory(b)))
 	}
-	cert, err := tls.X509KeyPair(pemData, pemData)
+	cert, err = tls.X509KeyPair(pemData, pemData)
 	if err != nil {
-		panic(err)
+		return cert, err
 	}
-	return cert
+	return cert, err
 }
 
 //PostXMLWithTLS perform a HTTP/POST request with XML body and TLS
-func PostXMLWithTLS(uri string, obj interface{}, ca, key string) ([]byte, error) {
-	xmlData, err := xml.Marshal(obj)
+func PostXMLWithTLS(uri string, obj map[string]interface{}, ca, key string) ([]byte, error) {
+	mv := mxj.Map(obj)
+	xmlData, err := mv.Xml()
 	if err != nil {
 		return nil, err
 	}
-
 	body := bytes.NewBuffer(xmlData)
+
 	client, err := httpWithTLS(ca, key)
 	if err != nil {
 		return nil, err
