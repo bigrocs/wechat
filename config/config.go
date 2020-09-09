@@ -8,4 +8,6 @@ type Config struct {
 	SubMchId string // 子商户号
 	Secret   string
 	CA       string // 双向证书
+	PemCert  string // pem 双向证书
+	PemKey   string // pem 双向证书
 }

@@ -193,12 +193,17 @@ func PostXML(uri string, obj map[string]interface{}) ([]byte, error) {
 // }
 
 //httpWithTLS CA证书
-func httpWithTLS(rootCa, key string) (client *http.Client, err error) {
-	certData, err := ioutil.ReadFile(rootCa)
-	if err != nil {
-		return nil, fmt.Errorf("unable to find cert path=%s, error=%v", rootCa, err)
+func httpWithTLS(rootCa, password, pemCert, pemKey string) (client *http.Client, err error) {
+	var cert tls.Certificate
+	if rootCa != "" {
+		certData, err := ioutil.ReadFile(rootCa)
+		if err != nil {
+			return nil, fmt.Errorf("unable to find cert path=%s, error=%v", rootCa, err)
+		}
+		cert, err = pkcs12ToPem(certData, password)
+	} else {
+		cert, err = tls.X509KeyPair([]byte(pemCert), []byte(pemKey))
 	}
-	cert, err := pkcs12ToPem(certData, key)
 	if err != nil {
 		return client, err
 	}
@@ -228,9 +233,9 @@ func pkcs12ToPem(p12 []byte, password string) (cert tls.Certificate, err error) 
 	var pemData []byte
 	for _, b := range blocks {
 		pemData = append(pemData, pem.EncodeToMemory(b)...)
-		fmt.Println(string(pem.EncodeToMemory(b)))
 	}
 	cert, err = tls.X509KeyPair(pemData, pemData)
+
 	if err != nil {
 		return cert, err
 	}
@@ -238,7 +243,7 @@ func pkcs12ToPem(p12 []byte, password string) (cert tls.Certificate, err error) 
 }
 
 //PostXMLWithTLS perform a HTTP/POST request with XML body and TLS
-func PostXMLWithTLS(uri string, obj map[string]interface{}, ca, key string) ([]byte, error) {
+func PostXMLWithTLS(uri string, obj map[string]interface{}, ca, password, pemCert, pemKey string) ([]byte, error) {
 	mv := mxj.Map(obj)
 	xmlData, err := mv.Xml()
 	if err != nil {
@@ -246,7 +251,7 @@ func PostXMLWithTLS(uri string, obj map[string]interface{}, ca, key string) ([]b
 	}
 	body := bytes.NewBuffer(xmlData)
 
-	client, err := httpWithTLS(ca, key)
+	client, err := httpWithTLS(ca, password, pemCert, pemKey)
 	if err != nil {
 		return nil, err
 	}

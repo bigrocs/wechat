@@ -58,13 +58,14 @@ func TestCode2Session(t *testing.T) {
 func TestMchPayRefund(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wx72ddcasdas5fdfe"
-	client.Config.MchId = "158asdas1731"
-	client.Config.ApiKey = "f61ee32da86asdas955fc60eca"
-	// client.Config.SubAppId = "wx72ddasdasa5fdfe"
-	client.Config.SubMchId = "159asdas221"
-	client.Config.CA = "/Users/biasdass/cert/1asdas31_202asdas09_cert/apiclient_cert.p12"
-
+	client.Config.AppId = "wx72ddcfgxer5fdfe"
+	client.Config.MchId = "15fgxer1731"
+	client.Config.ApiKey = "f61ee32da8fgxer119955fc60eca"
+	// client.Config.SubAppId = "wx72ddfgxer5a5fdfe"
+	client.Config.SubMchId = "159fgxer221"
+	client.Config.CA = "/apiclient_cert.p12"
+	client.Config.PemCert = ``
+	client.Config.PemKey = ``
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"

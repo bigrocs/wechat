@@ -57,7 +57,7 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	}
 	var res []byte
 	if req.ApiName == "pay.reverse" || req.ApiName == "pay.refund" { //  判断是否使用证书
-		res, err = util.PostXMLWithTLS(apiUrl, req.QueryParams, c.CA, req.QueryParams["mch_id"].(string))
+		res, err = util.PostXMLWithTLS(apiUrl, req.QueryParams, c.CA, req.QueryParams["mch_id"].(string), c.PemCert, c.PemKey)
 	} else {
 		res, err = util.PostXML(apiUrl, req.QueryParams)
 	}
