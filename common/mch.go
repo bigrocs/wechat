@@ -9,11 +9,22 @@ import (
 )
 
 var apiUrlsMch = map[string]string{
-	"pay.micropay":    "/pay/micropay",       //付款码支付
-	"pay.orderquery":  "/pay/orderquery",     //付款码支付查询
-	"pay.reverse":     "/secapi/pay/reverse", //付款码支付撤销订单
-	"pay.refund":      "/secapi/pay/refund",  //付款码支付申请退款
-	"pay.refundquery": "/pay/refundquery",    //付款码支付查询退款
+	// 不需要证书
+	"pay.micropay":     "/pay/micropay",     //付款码支付
+	"pay.unifiedorder": "/pay/unifiedorder", //统一下单
+	"pay.orderquery":   "/pay/orderquery",   //支付查询
+	"pay.closeorder":   "/pay/closeorder",   //关闭订单
+	"pay.refundquery":  "/pay/refundquery",  //付款码支付查询退款
+	"pay.downloadbill": "/pay/downloadbill", //下载交易账单
+	// 需要证书
+	"pay.reverse":          "/secapi/pay/reverse",   //付款码支付撤销订单
+	"pay.refund":           "/secapi/pay/refund",    //付款码支付申请退款
+	"pay.downloadfundflow": "/pay/downloadfundflow", //下载资金账单
+
+	"payitil.report":         "/payitil/report",         //交易保障
+	"tools.authcodetoopenid": "/tools/authcodetoopenid", //付款码查询openid
+	// 需要证书
+	"billcommentsp.batchquerycomment": "/billcommentsp/batchquerycomment", //拉取订单评价数据
 }
 
 // Mch 公共封装
@@ -56,7 +67,7 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 		return err
 	}
 	var res []byte
-	if req.ApiName == "pay.reverse" || req.ApiName == "pay.refund" { //  判断是否使用证书
+	if req.ApiName == "pay.reverse" || req.ApiName == "pay.refund" || req.ApiName == "pay.downloadfundflow" || req.ApiName == "billcommentsp.batchquerycomment" { //  判断是否使用证书
 		res, err = util.PostXMLWithTLS(apiUrl, req.QueryParams, c.CA, req.QueryParams["mch_id"].(string), c.PemCert, c.PemKey)
 	} else {
 		res, err = util.PostXML(apiUrl, req.QueryParams)
