@@ -10,7 +10,7 @@ import (
     "github.com/bigrocs/wechat/requests"
 )
 func main() {
-    // 参数配置
+	// 参数配置
 	client := wechat.NewClient()
 	client.Config.AppId = ""
 	client.Config.MchId = ""
