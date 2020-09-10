@@ -32,7 +32,7 @@ func main() {
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
 	reqMap, e := response.GetHttpContentMap() // map数据
-    reqJson, e := response.GetHttpContentJson() // json 数据
+	reqJson, e := response.GetHttpContentJson() // json 数据
 	fmt.Println(reqMap, reqJson , err, e)
 }
 ```
