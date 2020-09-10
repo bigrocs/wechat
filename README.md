@@ -14,12 +14,12 @@ func main() {
 	client.Config.AppId = ""
 	client.Config.MchId = ""
 	client.Config.ApiKey = ""
-	// client.Config.SubAppId = ""
+	client.Config.SubAppId = ""
 	client.Config.SubMchId = ""
 	client.Config.CA = "/apiclient_cert.p12"
 	client.Config.PemCert = ``
 	client.Config.PemKey = ``
-    // 退款示例 需要ca证书或pem证书
+ 	// 退款示例 需要ca证书或pem证书
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.refund"
@@ -31,8 +31,9 @@ func main() {
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
-	req, e := response.GetHttpContentMap()
-	fmt.Println(req, err, e)
+	reqMap, e := response.GetHttpContentMap() // map数据
+    reqJson, e := response.GetHttpContentJson() // json 数据
+	fmt.Println(reqMap, reqJson , err, e)
 }
 ```
 #### 小程序登陆授权
