@@ -85,8 +85,8 @@ func TestMchPayRefund(t *testing.T) {
 func TestOffiAccountAccessToken(t *testing.T) {
 	// 创建连接
 	// client := NewClient()
-	// client.Config.AppId = "wx1123333bea7abf4245"
-	// client.Config.Secret = "efd1193e41df66f343b90c42e0ce383eb2"
+	// client.Config.AppId = ""
+	// client.Config.Secret = ""
 
 	// // 配置参数
 	// request := requests.NewCommonRequest()
@@ -103,13 +103,13 @@ func TestOffiAccountAccessToken(t *testing.T) {
 func TestOffiAccountMessageTemplate(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AccessToken = "37_rZB3K_VGcf-4z-qJqslaPJyb5PRhRMRu6MRH2OoPBPtgbNaIjBZJ_Df3De5lqcgQ5Fr0T8huhP25KwocBddd6JyX1g2b2lkZBKplv9tsoL4z_lLEwg1Sb0-ppMEj9KtAzKKjucdwAqT7ylA0XVGeAHAQOZ"
+	client.Config.AccessToken = "37_rZB3K_VGcf-4z--ppMEj9KtAzKKjucdwAqT7ylA0XVGeAHAQOZ"
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "offiaccount"
 	request.ApiName = "message.template"
 	request.QueryParams = map[string]interface{}{
-		"touser":      "oEFAEjznGdJAt8S-dEgPDMVp4aso",
+		"touser":      "",
 		"template_id": "ybgOF-ZQsWTr8JS0lGwuRzFPdBKGAsiJiIk5ZX0EaDY",
 		"url":         "http://www.xilewanggou.com/download",
 		"data": map[string]interface{}{
