@@ -63,7 +63,7 @@ func TestMchPayRefund(t *testing.T) {
 	client.Config.ApiKey = "f61ee32da8fgxer119955fc60eca"
 	// client.Config.SubAppId = "wx72ddfgxer5a5fdfe"
 	client.Config.SubMchId = "159fgxer221"
-	client.Config.CA = "/apiclient_cert.p12"
+	// client.Config.CA = "/apiclient_cert.p12"
 	client.Config.PemCert = ``
 	client.Config.PemKey = ``
 	// 配置参数
@@ -80,4 +80,65 @@ func TestMchPayRefund(t *testing.T) {
 	response, err := client.ProcessCommonRequest(request)
 	req, e := response.GetHttpContentMap()
 	fmt.Println(req, err, e)
+}
+
+func TestOffiAccountAccessToken(t *testing.T) {
+	// 创建连接
+	// client := NewClient()
+	// client.Config.AppId = "wx1123333bea7abf4245"
+	// client.Config.Secret = "efd1193e41df66f343b90c42e0ce383eb2"
+
+	// // 配置参数
+	// request := requests.NewCommonRequest()
+	// request.Domain = "offiaccount"
+	// request.ApiName = "access_token"
+	// // 请求
+	// response, e := client.ProcessCommonRequest(request)
+	// req, err := response.GetHttpContentMap()
+	// fmt.Println("access_token", e, req, err)
+	// t.Log(response, err)
+	// t.Log(req, err)
+}
+
+func TestOffiAccountMessageTemplate(t *testing.T) {
+	// 创建连接
+	client := NewClient()
+	client.Config.AccessToken = "37_rZB3K_VGcf-4z-qJqslaPJyb5PRhRMRu6MRH2OoPBPtgbNaIjBZJ_Df3De5lqcgQ5Fr0T8huhP25KwocBddd6JyX1g2b2lkZBKplv9tsoL4z_lLEwg1Sb0-ppMEj9KtAzKKjucdwAqT7ylA0XVGeAHAQOZ"
+	// 配置参数
+	request := requests.NewCommonRequest()
+	request.Domain = "offiaccount"
+	request.ApiName = "message.template"
+	request.QueryParams = map[string]interface{}{
+		"touser":      "oEFAEjznGdJAt8S-dEgPDMVp4aso",
+		"template_id": "ybgOF-ZQsWTr8JS0lGwuRzFPdBKGAsiJiIk5ZX0EaDY",
+		"url":         "http://www.xilewanggou.com/download",
+		"data": map[string]interface{}{
+			"first": map[string]interface{}{
+				"value": "恭喜你下单成功！",
+				"color": "#173177",
+			},
+			"keyword1": map[string]interface{}{
+				"value": "2020年09月29日 21:49",
+				"color": "#173177",
+			},
+			"keyword2": map[string]interface{}{
+				"value": "苹果",
+				"color": "#173177",
+			},
+			"keyword3": map[string]interface{}{
+				"value": "00122009280001",
+				"color": "#173177",
+			},
+			"remark": map[string]interface{}{
+				"value": "欢迎再次购买！",
+				"color": "#173177",
+			},
+		},
+	}
+	// 请求
+	response, e := client.ProcessCommonRequest(request)
+	req, err := response.GetHttpContentMap()
+	fmt.Println("message.template", e, req, err)
+	t.Log(response, err)
+	t.Log(req, err)
 }
