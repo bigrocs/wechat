@@ -10,5 +10,6 @@ type Config struct {
 	PemCert     string // pem 双向证书
 	PemKey      string // pem 双向证书
 	Secret      string
-	AccessToken string
+	AccessToken string // 网页版授权Token
+	SessionKey  string // 小程序会话密钥
 }
