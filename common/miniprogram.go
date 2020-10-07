@@ -10,8 +10,7 @@ import (
 )
 
 var apiUrlsMiniprogram = map[string]string{
-	"auth.code2Session":   "/sns/jscode2session?appid={appid}&secret={secret}&grant_type=authorization_code",
-	"auth.getPaidUnionId": "/wxa/getpaidunionid?",
+	"auth.code2Session": "/sns/jscode2session?appid={appid}&secret={secret}&grant_type=authorization_code",
 }
 
 // Miniprogram 公共封装

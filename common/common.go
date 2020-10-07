@@ -38,7 +38,7 @@ func (c *Common) APIBaseURL() string { // TODO(): 后期做容灾功能
 
 // 公众号 API
 func (c *Common) APIBaseURLOffiAccount() string { // TODO(): 后期做容灾功能
-	return "https://api.weixin.qq.com/cgi-bin"
+	return "https://api.weixin.qq.com"
 }
 
 // // 微信商户平台(微信支付) API
