@@ -10,15 +10,15 @@ import (
 func TestCode2Session(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wx15550c1a89d982c8"
-	client.Config.Secret = "f9c11f183a5beb592ccd801298ff5533"
+	client.Config.AppId = "wx23333bea7abf4245"
+	client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "miniprogram"
 	request.ApiName = "auth.code2Session"
 	request.QueryParams = map[string]interface{}{
-		"js_code": "011e54Ga1XzcIz027NGa1ZfYOF2e54GO",
+		"js_code": "071zClGa1CiEKz0IltHa1KtPeE1zClGx",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
@@ -85,18 +85,60 @@ func TestMchPayRefund(t *testing.T) {
 
 func TestOffiAccountAccessToken(t *testing.T) {
 	// 创建连接
+	// client := NewClient()
+	// client.Config.AppId = ""
+	// client.Config.Secret = ""
+
+	// // 配置参数
+	// request := requests.NewCommonRequest()
+	// request.Domain = "offiaccount"
+	// request.ApiName = "cgi-bin.access_token"
+	// // 请求
+	// response, e := client.ProcessCommonRequest(request)
+	// req, err := response.GetHttpContentMap()
+	// fmt.Println("access_token", e, req, err)
+	// t.Log(response, err)
+	// t.Log(req, err)
+}
+
+func TestOffiAccountAuthorize(t *testing.T) {
+	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wx15550c1a89d982c8"
-	client.Config.Secret = "f9c11f183a5beb592ccd801298ff5533"
+	client.Config.AppId = "wx23333bea7abf4245"
+	client.Config.Secret = ""
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "offiaccount"
-	request.ApiName = "cgi-bin.access_token"
+	request.ApiName = "connect.oauth2.authorize"
+	request.QueryParams = map[string]interface{}{
+		"redirect_uri": "http://www.xilewanggou.com/rpc",
+	}
 	// 请求
 	response, e := client.ProcessCommonRequest(request)
 	req, err := response.GetHttpContentMap()
-	fmt.Println("access_token", e, req, err)
+	fmt.Println("connect.oauth2.authorize", e, req, err)
+	t.Log(response, err)
+	t.Log(req, err)
+}
+
+func TestOffiAccountSnsAccessToken(t *testing.T) {
+	// 创建连接
+	client := NewClient()
+	client.Config.AppId = "wx23333bea7abf4245"
+	client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
+
+	// 配置参数
+	request := requests.NewCommonRequest()
+	request.Domain = "offiaccount"
+	request.ApiName = "sns.oauth2.access_token"
+	request.QueryParams = map[string]interface{}{
+		"code": "021Tss0w3rOR5V2szy2w3K1oT31Tss0L",
+	}
+	// 请求
+	response, e := client.ProcessCommonRequest(request)
+	req, err := response.GetHttpContentMap()
+	fmt.Println("sns.oauth2.access_token", e, req, err)
 	t.Log(response, err)
 	t.Log(req, err)
 }

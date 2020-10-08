@@ -2,7 +2,7 @@
 package common
 
 import (
-	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/bigrocs/wechat/responses"
@@ -17,6 +17,11 @@ type apiUrl struct {
 }
 
 var apiUrlsOffiAccount = []apiUrl{
+	{ // 用户同意授权，获取code
+		Name:   "connect.oauth2.authorize",
+		Method: "get",
+		URL:    "/connect/oauth2/authorize?appid={appid}&redirect_uri={redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
+	},
 	{ // 通过code换取网页授权access_token
 		Name:   "sns.oauth2.access_token",
 		Method: "get",
@@ -57,30 +62,42 @@ func (o *OffiAccount) ApiUrl() (apiUrl string, method string, err error) {
 	for _, u := range apiUrlsOffiAccount {
 		if u.Name == req.ApiName {
 			method = u.Method
-			url := o.c.APIBaseURLOffiAccount() + u.URL
-			apiUrl = strings.Replace(url, "{appid}", c.AppId, -1)
+			apiUrl = o.c.APIBaseURLOffiAccount() + u.URL
+			apiUrl = strings.Replace(apiUrl, "{appid}", c.AppId, -1)
 			apiUrl = strings.Replace(apiUrl, "{secret}", c.Secret, -1)
 			apiUrl = strings.Replace(apiUrl, "{access_token}", c.AccessToken, -1)
 			if u.Method == "get" {
 				for key, val := range req.QueryParams {
-					apiUrl = apiUrl + "&" + key + "=" + util.InterfaceToString(val)
+					var value string
+					if key == "redirect_uri" {
+						apiUrl = strings.Replace(apiUrl, "api.weixin.qq.com", "open.weixin.qq.com", -1)
+						apiUrl = strings.Replace(apiUrl, "{redirect_uri}", url.QueryEscape(util.InterfaceToString(val)), -1)
+					} else {
+						value = util.InterfaceToString(val)
+						apiUrl = apiUrl + "&" + key + "=" + value
+					}
 				}
 			}
 		}
-	}
-	if apiUrl == "" {
-		err = fmt.Errorf("ApiName 不存在请检查。")
 	}
 	return
 }
 
 // Request 执行请求
 func (o *OffiAccount) Request(response *responses.CommonResponse) (err error) {
+	req := o.c.Requests
 	apiUrl, method, err := o.ApiUrl()
 	if err != nil {
 		return err
 	}
-	req := o.c.Requests
+	if req.ApiName == "connect.oauth2.authorize" {
+		response.SetHttpContent([]byte(`
+		{
+			"url": "`+apiUrl+`"
+		}
+		`), "string")
+		return
+	}
 	var res []byte
 	if method == "post" {
 		res, err = util.PostJSON(apiUrl, req.QueryParams)
