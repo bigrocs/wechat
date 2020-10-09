@@ -46,7 +46,7 @@ var apiUrlsOffiAccount = []apiUrl{
 	}, {
 		Name:   "cgi-bin.message.template.send",
 		Method: "post",
-		URL:    "/cgi-bin/message/template/send?access_token={access_token}",
+		URL:    "/cgi-bin/message/template/send?",
 	},
 }
 
@@ -65,7 +65,6 @@ func (o *OffiAccount) ApiUrl() (apiUrl string, method string, err error) {
 			apiUrl = o.c.APIBaseURLOffiAccount() + u.URL
 			apiUrl = strings.Replace(apiUrl, "{appid}", c.AppId, -1)
 			apiUrl = strings.Replace(apiUrl, "{secret}", c.Secret, -1)
-			apiUrl = strings.Replace(apiUrl, "{access_token}", c.AccessToken, -1)
 			if u.Method == "get" {
 				for key, val := range req.QueryParams {
 					var value string
