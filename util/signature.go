@@ -10,7 +10,7 @@ import (
 )
 
 // SessionInfo 解密小程序会话加密信息
-func SessionInfo(EncryptedData, sessionKey, iv string) (info *mxj.Map, err error) {
+func SessionInfo(EncryptedData, sessionKey, iv string) (m mxj.Map, err error) {
 	// return mxj.NewMapJson([]byte(req.json))
 	cipherText, err := base64.StdEncoding.DecodeString(EncryptedData)
 	aesKey, err := base64.StdEncoding.DecodeString(sessionKey)
