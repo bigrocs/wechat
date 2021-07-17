@@ -18,10 +18,8 @@ const (
 )
 
 // VerifySign 验证支付
-func VerifySign(params map[string]interface{}, apiKey string, signType string) bool {
-	bodySign := params["sign"]
-	sign := Sign(params, apiKey, signType)
-	return bodySign == sign
+func VerifySign(params map[string]interface{}, sign string, apiKey string, signType string) bool {
+	return sign == Sign(params, apiKey, signType)
 }
 
 // Sign 微信支付签名.

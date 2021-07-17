@@ -22,7 +22,7 @@ func NewClient() (client *Client) {
 
 // ProcessCommonRequest 处理公共请求
 func (client *Client) ProcessCommonRequest(request *requests.CommonRequest) (response *responses.CommonResponse, err error) {
-	response = responses.NewCommonResponse()
+	response = responses.NewCommonResponse(client.Config, request)
 	err = client.DoAction(request, response)
 	return
 }

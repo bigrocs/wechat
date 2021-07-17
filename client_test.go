@@ -9,52 +9,77 @@ import (
 
 func TestCode2Session(t *testing.T) {
 	// 创建连接
+	// client := NewClient()
+	// client.Config.AppId = "wx23333bea7abf4245"
+	// client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
+	// client.Config.SignType = "MD5"
+
+	// // 配置参数
+	// request := requests.NewCommonRequest()
+	// request.Domain = "miniprogram"
+	// request.ApiName = "auth.code2Session"
+	// request.QueryParams = map[string]interface{}{
+	// 	"js_code": "071zClGa1CiEKz0IltHa1KtPeE1zClGx",
+	// }
+	// // 请求
+	// response, err := client.ProcessCommonRequest(request)
+	// req, err := response.GetHttpContentMap()
+	// fmt.Println("_____________", req)
+	// t.Log(response, err)
+	// t.Log(req, err)
+}
+
+func TestMchPayMicropay(t *testing.T) {
+	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wx23333bea7abf4245"
-	client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
+	client.Config.AppId = "wx72ddcf03d5a5fdfe"
+	client.Config.MchId = "1584521731"
+	client.Config.ApiKey = "f61ee32da86000a1b16119955fc60eca"
+	// client.Config.SubAppId = "wx72ddcf03d5a5fdfe"
+	client.Config.SubMchId = "1597690221"
 
 	// 配置参数
 	request := requests.NewCommonRequest()
-	request.Domain = "miniprogram"
-	request.ApiName = "auth.code2Session"
+	request.Domain = "mch"
+	request.ApiName = "pay.micropay"
 	request.QueryParams = map[string]interface{}{
-		"js_code": "071zClGa1CiEKz0IltHa1KtPeE1zClGx",
+		"auth_code":        "134550779079187440",
+		"body":             "测试商品名称1",
+		"out_trade_no":     "2020021000071",
+		"total_fee":        "1",
+		"spbill_create_ip": "127.0.0.1",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
-	req, err := response.GetHttpContentMap()
-	fmt.Println("_____________", req)
-	t.Log(response, err)
+	req, err := response.GetVerifySignDataMap()
+	// fmt.Println(response, err)
+	fmt.Println(req, err)
 	t.Log(req, err)
 }
 
-// func TestMchPayMicropay(t *testing.T) {
-// 	// 创建连接
-// 	client := NewClient()
-// 	client.Config.AppId = "wx72ddcf03d5a5fdfe"
-// 	client.Config.MchId = "1584521731"
-// 	client.Config.ApiKey = "f61ee32da86000a1b16119955fc60eca"
-// 	// client.Config.SubAppId = "wx72ddcf03d5a5fdfe"
-// 	client.Config.SubMchId = "1597690221"
+func TestMchPayOrderquery(t *testing.T) {
+	// 创建连接
+	client := NewClient()
+	client.Config.AppId = "wx72ddcf03d5a5fdfe"
+	client.Config.MchId = "1584521731"
+	client.Config.ApiKey = "f61ee32da86000a1b16119955fc60eca"
+	// client.Config.SubAppId = "wx72ddcf03d5a5fdfe"
+	client.Config.SubMchId = "1597690221"
 
-// 	// 配置参数
-// 	request := requests.NewCommonRequest()
-// 	request.Domain = "mch"
-// 	request.ApiName = "pay.micropay"
-// 	request.QueryParams = map[string]interface{}{
-// 		"auth_code":        "134550779079187440",
-// 		"body":             "测试商品名称1",
-// 		"out_trade_no":     "2020021000071",
-// 		"total_fee":        "1",
-// 		"spbill_create_ip": "127.0.0.1",
-// 	}
-// 	// 请求
-// 	response, err := client.ProcessCommonRequest(request)
-// 	req, err := response.GetHttpContentMap()
-// 	// fmt.Println(response, err)
-// 	// fmt.Println(req, err)
-// 	t.Log(req, err)
-// }
+	// 配置参数
+	request := requests.NewCommonRequest()
+	request.Domain = "mch"
+	request.ApiName = "pay.orderquery"
+	request.QueryParams = map[string]interface{}{
+		"out_trade_no": "20200210000712",
+	}
+	// 请求
+	response, err := client.ProcessCommonRequest(request)
+	req, err := response.GetVerifySignDataMap()
+	// fmt.Println(response, err)
+	fmt.Println(req, err)
+	t.Log(req, err)
+}
 
 func TestMchPayRefund(t *testing.T) {
 	// 创建连接
@@ -103,44 +128,44 @@ func TestOffiAccountAccessToken(t *testing.T) {
 
 func TestOffiAccountAuthorize(t *testing.T) {
 	// 创建连接
-	client := NewClient()
-	client.Config.AppId = "wx23333bea7abf4245"
-	client.Config.Secret = ""
+	// 	client := NewClient()
+	// 	client.Config.AppId = "wx23333bea7abf4245"
+	// 	client.Config.Secret = ""
 
-	// 配置参数
-	request := requests.NewCommonRequest()
-	request.Domain = "offiaccount"
-	request.ApiName = "connect.oauth2.authorize"
-	request.QueryParams = map[string]interface{}{
-		"redirect_uri": "http://www.xilewanggou.com/rpc",
-	}
-	// 请求
-	response, e := client.ProcessCommonRequest(request)
-	req, err := response.GetHttpContentMap()
-	fmt.Println("connect.oauth2.authorize", e, req, err)
-	t.Log(response, err)
-	t.Log(req, err)
+	// 	// 配置参数
+	// 	request := requests.NewCommonRequest()
+	// 	request.Domain = "offiaccount"
+	// 	request.ApiName = "connect.oauth2.authorize"
+	// 	request.QueryParams = map[string]interface{}{
+	// 		"redirect_uri": "http://www.xilewanggou.com/rpc",
+	// 	}
+	// 	// 请求
+	// 	response, e := client.ProcessCommonRequest(request)
+	// 	req, err := response.GetHttpContentMap()
+	// 	fmt.Println("connect.oauth2.authorize", e, req, err)
+	// 	t.Log(response, err)
+	// 	t.Log(req, err)
 }
 
 func TestOffiAccountSnsAccessToken(t *testing.T) {
-	// 创建连接
-	client := NewClient()
-	client.Config.AppId = "wx23333bea7abf4245"
-	client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
+	// // 创建连接
+	// client := NewClient()
+	// client.Config.AppId = "wx23333bea7abf4245"
+	// client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
 
-	// 配置参数
-	request := requests.NewCommonRequest()
-	request.Domain = "offiaccount"
-	request.ApiName = "sns.oauth2.access_token"
-	request.QueryParams = map[string]interface{}{
-		"code": "021Tss0w3rOR5V2szy2w3K1oT31Tss0L",
-	}
-	// 请求
-	response, e := client.ProcessCommonRequest(request)
-	req, err := response.GetHttpContentMap()
-	fmt.Println("sns.oauth2.access_token", e, req, err)
-	t.Log(response, err)
-	t.Log(req, err)
+	// // 配置参数
+	// request := requests.NewCommonRequest()
+	// request.Domain = "offiaccount"
+	// request.ApiName = "sns.oauth2.access_token"
+	// request.QueryParams = map[string]interface{}{
+	// 	"code": "021Tss0w3rOR5V2szy2w3K1oT31Tss0L",
+	// }
+	// // 请求
+	// response, e := client.ProcessCommonRequest(request)
+	// req, err := response.GetHttpContentMap()
+	// fmt.Println("sns.oauth2.access_token", e, req, err)
+	// t.Log(response, err)
+	// t.Log(req, err)
 }
 
 func TestOffiAccountMessageTemplate(t *testing.T) {

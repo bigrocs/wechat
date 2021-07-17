@@ -16,12 +16,25 @@ package responses
 
 import (
 	"encoding/json"
+	"errors"
 
+	"github.com/bigrocs/wechat/config"
+	"github.com/bigrocs/wechat/requests"
+	"github.com/bigrocs/wechat/util"
 	"github.com/clbanning/mxj"
+)
+
+const (
+	CLOSED     = "CLOSED"     // -1 订单关闭
+	USERPAYING = "USERPAYING" // 0	订单支付中
+	SUCCESS    = "SUCCESS"    // 1	订单支付成功
+	WAIT       = "WAIT"       // 2	系统执行中请等待
 )
 
 // CommonResponse 公共回应
 type CommonResponse struct {
+	Config      *config.Config
+	Request     *requests.CommonRequest
 	httpContent []byte
 	json        string
 }
@@ -29,26 +42,94 @@ type CommonResponse struct {
 type Map *mxj.Map
 
 // NewCommonResponse 创建新的请求返回
-func NewCommonResponse() (response *CommonResponse) {
-	return &CommonResponse{}
+func NewCommonResponse(config *config.Config, request *requests.CommonRequest) (response *CommonResponse) {
+	c := &CommonResponse{}
+	c.Config = config
+	c.Request = request
+	return c
 }
 
 // GetHttpContentJson 获取 JSON 数据
-func (req *CommonResponse) GetHttpContentJson() string {
-	return req.json
+func (res *CommonResponse) GetHttpContentJson() string {
+	return res.json
 }
 
 // GetHttpContentMap 获取 MAP 数据
-func (req *CommonResponse) GetHttpContentMap() (mxj.Map, error) {
-	return mxj.NewMapJson([]byte(req.json))
+func (res *CommonResponse) GetHttpContentMap() (mxj.Map, error) {
+	return mxj.NewMapJson([]byte(res.json))
+}
+
+// GetSignDataMap 获取 MAP 数据
+func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
+	data := mxj.New()
+	content, err := res.GetHttpContentMap()
+	data["content"] = content
+	// 下单
+	// 查询 trade_state
+	// SUCCESS--支付成功
+	// REFUND--转入退款
+	// NOTPAY--未支付
+	// CLOSED--已关闭
+	// REVOKED--已撤销(刷卡支付)
+	// USERPAYING--用户支付中
+	// PAYERROR--支付失败(其他原因，如银行返回失败)
+	// ACCEPT--已接收，等待扣款
+	// 支付状态机请见下单API页面
+	data["return_msg"] = content["err_code_des"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			switch content["trade_state"] {
+			case "SUCCESS":
+				data["stauts"] = SUCCESS
+			case "REFUND":
+				data["stauts"] = SUCCESS
+			case "NOTPAY":
+				data["stauts"] = USERPAYING
+			case "CLOSED":
+				data["stauts"] = CLOSED
+			case "REVOKED":
+				data["stauts"] = CLOSED
+			case "PAYERROR":
+				data["stauts"] = CLOSED
+			case "ACCEPT":
+				data["stauts"] = WAIT
+			}
+		} else {
+			data["return_code"] = "FAIL"
+			if content["err_code"] == "ORDERNOTEXIST" { // 订单不存在关闭
+				data["stauts"] = CLOSED
+			}
+		}
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data, err
+}
+
+// GetVerifySignDataMap 获取 GetVerifySignDataMap 校验后数据数据
+func (res *CommonResponse) GetVerifySignDataMap() (m mxj.Map, err error) {
+	r, err := res.GetHttpContentMap()
+	if err != nil {
+		return m, err
+	}
+	if r["sign"] != nil {
+		if util.VerifySign(r, r["sign"].(string), res.Config.ApiKey, res.Config.SignType) {
+			return res.GetSignDataMap()
+		} else {
+			return r, errors.New("sign verification failed")
+		}
+	} else {
+		return r, errors.New("sign is not")
+	}
 }
 
 // SetHttpContent 设置请求信息
-func (req *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
-	req.httpContent = httpContent
+func (res *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
+	res.httpContent = httpContent
 	switch dataType {
 	case "xml":
-		mv, _ := mxj.NewMapXml(req.httpContent) // unmarshal
+		mv, _ := mxj.NewMapXml(res.httpContent) // unmarshal
 		var str interface{}
 		if _, ok := mv["xml"]; ok { //去掉 xml 外层
 			str = mv["xml"]
@@ -56,8 +137,8 @@ func (req *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
 			str = mv
 		}
 		jsonStr, _ := json.Marshal(str)
-		req.json = string(jsonStr)
+		res.json = string(jsonStr)
 	case "string":
-		req.json = string(req.httpContent)
+		res.json = string(res.httpContent)
 	}
 }
