@@ -28,7 +28,8 @@ const (
 	CLOSED     = "CLOSED"     // -1 订单关闭
 	USERPAYING = "USERPAYING" // 0	订单支付中
 	SUCCESS    = "SUCCESS"    // 1	订单支付成功
-	WAIT       = "WAIT"       // 2	系统执行中请等待
+	REFUND     = "REFUND"     // 2 退款
+	WAIT       = "WAIT"       // 3	系统执行中请等待
 )
 
 // CommonResponse 公共回应
@@ -83,7 +84,7 @@ func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
 			case "SUCCESS":
 				data["stauts"] = SUCCESS
 			case "REFUND":
-				data["stauts"] = SUCCESS
+				data["stauts"] = REFUND
 			case "NOTPAY":
 				data["stauts"] = USERPAYING
 			case "CLOSED":

@@ -71,7 +71,7 @@ func TestMchPayOrderquery(t *testing.T) {
 	request.Domain = "mch"
 	request.ApiName = "pay.orderquery"
 	request.QueryParams = map[string]interface{}{
-		"out_trade_no": "20200210000712",
+		"out_trade_no": "2020021000071",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
