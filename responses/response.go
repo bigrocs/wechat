@@ -134,7 +134,7 @@ func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
 	}
 
 	data["channel"] = "wechat" //渠道
-	// data["content"] = content
+	data["content"] = content
 	return data, err
 }
 
