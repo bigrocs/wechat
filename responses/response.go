@@ -59,54 +59,6 @@ func (res *CommonResponse) GetHttpContentMap() (mxj.Map, error) {
 	return mxj.NewMapJson([]byte(res.json))
 }
 
-// GetSignDataMap 获取 MAP 数据
-func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
-	data := mxj.New()
-	content, err := res.GetHttpContentMap()
-	data["content"] = content
-	// 下单
-	// 查询 trade_state
-	// SUCCESS--支付成功
-	// REFUND--转入退款
-	// NOTPAY--未支付
-	// CLOSED--已关闭
-	// REVOKED--已撤销(刷卡支付)
-	// USERPAYING--用户支付中
-	// PAYERROR--支付失败(其他原因，如银行返回失败)
-	// ACCEPT--已接收，等待扣款
-	// 支付状态机请见下单API页面
-	data["return_msg"] = content["err_code_des"]
-	if content["return_code"] == "SUCCESS" {
-		if content["result_code"] == "SUCCESS" {
-			data["return_code"] = SUCCESS
-			switch content["trade_state"] {
-			case "SUCCESS":
-				data["stauts"] = SUCCESS
-			case "REFUND":
-				data["stauts"] = SUCCESS
-			case "NOTPAY":
-				data["stauts"] = USERPAYING
-			case "CLOSED":
-				data["stauts"] = CLOSED
-			case "REVOKED":
-				data["stauts"] = CLOSED
-			case "PAYERROR":
-				data["stauts"] = CLOSED
-			case "ACCEPT":
-				data["stauts"] = WAIT
-			}
-		} else {
-			data["return_code"] = "FAIL"
-			if content["err_code"] == "ORDERNOTEXIST" { // 订单不存在关闭
-				data["stauts"] = CLOSED
-			}
-		}
-	} else {
-		data["return_code"] = "FAIL"
-	}
-	return data, err
-}
-
 // GetVerifySignDataMap 获取 GetVerifySignDataMap 校验后数据数据
 func (res *CommonResponse) GetVerifySignDataMap() (m mxj.Map, err error) {
 	r, err := res.GetHttpContentMap()
@@ -141,4 +93,169 @@ func (res *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
 	case "string":
 		res.json = string(res.httpContent)
 	}
+}
+
+// data{
+// 	channel			//	通道内容		alipay、wechat、icbc
+// 	content			//	第三方返回内容 	{}
+// 	return_code		//	返回代码 		SUCCESS
+// 	return_msg		//	返回消息		支付失败
+// 	stauts			//	下单状态 		【SUCCESS成功、CLOSED关闭、USERPAYING等待用户付款、WAIT系统繁忙稍后查询】
+// 	total_fee		//  订单金额		88
+// 	refund_fee 		//  退款金额		10
+// 	trade_no 		// 	渠道交易编号 	2013112011001004330000121536
+// 	out_trade_no	// 	商户订单号		T1024501231476
+//  out_refund_no	//  商户退款单号	T1024501231476_T
+// 	wechat_open_id		//  微信openid		[oUpF8uN95-Ptaags6E_roPHg7AG
+//  wechat_is_subscribe 	//  微信是否微信关注公众号
+// 	alipay_buyer_logon_id  //	支付宝账号		158****1562
+//  alipay_buyer_user_id  //	买家在支付宝的用户id	2088101117955611
+// 	time_end		//  支付完成时间	20141030133525
+// }
+
+// GetSignDataMap 获取 MAP 数据
+func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
+	data := mxj.New()
+	content, err := res.GetHttpContentMap()
+	if err != nil {
+		return nil, err
+	}
+	if res.Request.ApiName == "pay.micropay" {
+		data = res.handerWechatTradePay(content)
+	}
+	if res.Request.ApiName == "pay.orderquery" {
+		data = res.handerWechatTradeQuery(content)
+	}
+	if res.Request.ApiName == "pay.refund" {
+		data = res.handerWechatTradeRefund(content)
+	}
+	if res.Request.ApiName == "pay.refundquery" {
+		data = res.handerWechatTradeRefundQuery(content)
+	}
+
+	data["channel"] = "wechat" //渠道
+	// data["content"] = content
+	return data, err
+}
+
+// handerWechatTradePay
+func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
+	data := mxj.New()
+	data["stauts"] = "" // 状态
+	data["return_msg"] = content["return_msg"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			data["stauts"] = SUCCESS
+			data["total_fee"] = content["total_fee"]
+			data["trade_no"] = content["transaction_id"]
+			data["out_trade_no"] = content["out_trade_no"]
+			data["wechat_is_subscribe"] = content["is_subscribe"]
+			data["wechat_open_id"] = content["openid"]
+			data["time_end"] = content["time_end"]
+		} else {
+			data["return_code"] = "FAIL"
+			data["return_msg"] = content["err_code_des"]
+		}
+
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data
+}
+
+// handerWechatTradeQuery
+func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
+	// 	SUCCESS--支付成功
+	// REFUND--转入退款
+	// NOTPAY--未支付
+	// CLOSED--已关闭
+	// REVOKED--已撤销(刷卡支付)
+	// USERPAYING--用户支付中
+	// PAYERROR--支付失败(其他原因，如银行返回失败)
+	// ACCEPT--已接收，等待扣款
+	// 支付状态机请见下单API页面
+	data := mxj.New()
+	data["stauts"] = "" // 状态
+	data["return_msg"] = content["return_msg"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			switch content["trade_state"] {
+			case "SUCCESS":
+				data["stauts"] = SUCCESS
+			case "REFUND":
+				data["stauts"] = SUCCESS
+			case "NOTPAY":
+				data["stauts"] = USERPAYING
+			case "CLOSED":
+				data["stauts"] = CLOSED
+			case "REVOKED":
+				data["stauts"] = CLOSED
+			case "USERPAYING":
+				data["stauts"] = USERPAYING
+			case "PAYERROR":
+				data["stauts"] = CLOSED
+			case "ACCEPT":
+				data["stauts"] = WAIT
+			}
+			data["total_fee"] = content["total_fee"]
+			data["trade_no"] = content["transaction_id"]
+			data["out_trade_no"] = content["out_trade_no"]
+			data["wechat_is_subscribe"] = content["is_subscribe"]
+			data["wechat_open_id"] = content["openid"]
+			data["time_end"] = content["time_end"]
+		} else {
+			data["return_code"] = "FAIL"
+			data["return_msg"] = content["err_code_des"]
+		}
+
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data
+}
+
+// handerWechatTradeRefund
+func (res *CommonResponse) handerWechatTradeRefund(content mxj.Map) mxj.Map {
+	data := mxj.New()
+	data["return_msg"] = content["return_msg"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			data["total_fee"] = content["total_fee"]
+			data["refund_fee"] = content["refund_fee"]
+			data["trade_no"] = content["transaction_id"]
+			data["out_trade_no"] = content["out_trade_no"]
+			data["out_refund_no"] = content["out_refund_no"]
+		} else {
+			data["return_code"] = "FAIL"
+			data["return_msg"] = content["err_code_des"]
+		}
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data
+}
+
+// handerWechatTradeRefundQuery
+func (res *CommonResponse) handerWechatTradeRefundQuery(content mxj.Map) mxj.Map {
+	data := mxj.New()
+	data["return_msg"] = content["return_msg"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			data["total_fee"] = content["total_fee"]
+			data["refund_fee"] = content["refund_fee"]
+			data["trade_no"] = content["transaction_id"]
+			data["out_trade_no"] = content["out_trade_no"]
+			data["out_refund_no"] = content["out_refund_no"]
+		} else {
+			data["return_code"] = "FAIL"
+			data["return_msg"] = content["err_code_des"]
+		}
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data
 }

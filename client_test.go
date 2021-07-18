@@ -2,6 +2,7 @@ package wechat
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/bigrocs/wechat/requests"
@@ -10,8 +11,8 @@ import (
 func TestCode2Session(t *testing.T) {
 	// 创建连接
 	// client := NewClient()
-	// client.Config.AppId = "wx23333bea7abf4245"
-	// client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
+	// client.Config.AppId =  os.Getenv("WECHAT_APPID")
+	// client.Config.Secret =  os.Getenv("WECHAT_APPID")
 	// client.Config.SignType = "MD5"
 
 	// // 配置参数
@@ -32,87 +33,112 @@ func TestCode2Session(t *testing.T) {
 func TestMchPayMicropay(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wx72ddcf03d5a5fdfe"
-	client.Config.MchId = "1584521731"
-	client.Config.ApiKey = "f61ee32da86000a1b16119955fc60eca"
-	// client.Config.SubAppId = "wx72ddcf03d5a5fdfe"
-	client.Config.SubMchId = "1597690221"
+	client.Config.AppId = os.Getenv("WECHAT_APPID")
+	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
+	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
+	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.micropay"
 	request.QueryParams = map[string]interface{}{
-		"auth_code":        "134550779079187440",
+		"auth_code":        "136539919261043694",
 		"body":             "测试商品名称1",
-		"out_trade_no":     "2020021000071",
-		"total_fee":        "1",
+		"out_trade_no":     "20200210000715",
+		"total_fee":        "2",
 		"spbill_create_ip": "127.0.0.1",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
 	req, err := response.GetVerifySignDataMap()
 	// fmt.Println(response, err)
-	fmt.Println(req, err)
+	fmt.Println("TestMchPayMicropay_____", req, err)
 	t.Log(req, err)
 }
 
-func TestMchPayOrderquery(t *testing.T) {
+func TestMchPayOrderQuery(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = "wx72ddcf03d5a5fdfe"
-	client.Config.MchId = "1584521731"
-	client.Config.ApiKey = "f61ee32da86000a1b16119955fc60eca"
-	// client.Config.SubAppId = "wx72ddcf03d5a5fdfe"
-	client.Config.SubMchId = "1597690221"
+	client.Config.AppId = os.Getenv("WECHAT_APPID")
+	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
+	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
+	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.orderquery"
 	request.QueryParams = map[string]interface{}{
-		"out_trade_no": "2020021000071",
+		"out_trade_no": "20200210000715",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
 	req, err := response.GetVerifySignDataMap()
 	// fmt.Println(response, err)
-	fmt.Println(req, err)
+	fmt.Println("TestMchPayOrderQuery_____", req, err)
 	t.Log(req, err)
 }
 
 func TestMchPayRefund(t *testing.T) {
 	// 创建连接
-	// client := NewClient()
-	// client.Config.AppId = "wx72ddcfgxer5fdfe"
-	// client.Config.MchId = "15fgxer1731"
-	// client.Config.ApiKey = "f61ee32da8fgxer119955fc60eca"
-	// // client.Config.SubAppId = "wx72ddfgxer5a5fdfe"
-	// client.Config.SubMchId = "159fgxer221"
-	// // client.Config.CA = "/apiclient_cert.p12"
-	// client.Config.PemCert = ``
-	// client.Config.PemKey = ``
-	// // 配置参数
-	// request := requests.NewCommonRequest()
-	// request.Domain = "mch"
-	// request.ApiName = "pay.refund"
-	// request.QueryParams = map[string]interface{}{
-	// 	"out_trade_no":  "2020021000071",
-	// 	"out_refund_no": "2020021000071" + "1",
-	// 	"total_fee":     "1",
-	// 	"refund_fee":    "1",
-	// }
-	// // 请求
-	// response, err := client.ProcessCommonRequest(request)
-	// req, e := response.GetHttpContentMap()
-	// fmt.Println(req, err, e)
+	client := NewClient()
+	client.Config.AppId = os.Getenv("WECHAT_APPID")
+	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
+	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
+	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
+	// client.Config.CA = "/apiclient_cert.p12"
+	client.Config.PemCert = os.Getenv("WECHAT_PEM_CERT")
+	client.Config.PemKey = os.Getenv("WECHAT_PEM_KEY")
+	// 配置参数
+	request := requests.NewCommonRequest()
+	request.Domain = "mch"
+	request.ApiName = "pay.refund"
+	request.QueryParams = map[string]interface{}{
+		"out_trade_no":  "20200210000715",
+		"out_refund_no": "20200210000715" + "1",
+		"total_fee":     "2",
+		"refund_fee":    "1",
+	}
+	// 请求
+	response, err := client.ProcessCommonRequest(request)
+	req, e := response.GetVerifySignDataMap()
+	fmt.Println("TestMchPayRefund_____", req, err, e)
+}
+
+func TestMchPayRefundQuery(t *testing.T) {
+	// 创建连接
+	client := NewClient()
+	client.Config.AppId = os.Getenv("WECHAT_APPID")
+	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
+	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
+	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
+	// client.Config.CA = "/apiclient_cert.p12"
+	client.Config.PemCert = os.Getenv("WECHAT_PEM_CERT")
+	client.Config.PemKey = os.Getenv("WECHAT_PEM_KEY")
+	// 配置参数
+	request := requests.NewCommonRequest()
+	request.Domain = "mch"
+	request.ApiName = "pay.refundquery"
+	request.QueryParams = map[string]interface{}{
+		"out_trade_no":  "20200210000715",
+		"out_refund_no": "20200210000715" + "1",
+	}
+	// 请求
+	response, err := client.ProcessCommonRequest(request)
+	req, e := response.GetVerifySignDataMap()
+	fmt.Println("TestMchPayRefundQuery_____", req, err, e)
 }
 
 func TestOffiAccountAccessToken(t *testing.T) {
 	// 创建连接
 	// client := NewClient()
-	// client.Config.AppId = ""
-	// client.Config.Secret = ""
+	// client.Config.AppId =  os.Getenv("WECHAT_APPID")
+	// client.Config.Secret =  os.Getenv("WECHAT_APPID")
 
 	// // 配置参数
 	// request := requests.NewCommonRequest()
@@ -129,7 +155,7 @@ func TestOffiAccountAccessToken(t *testing.T) {
 func TestOffiAccountAuthorize(t *testing.T) {
 	// 创建连接
 	// 	client := NewClient()
-	// 	client.Config.AppId = "wx23333bea7abf4245"
+	// 	client.Config.AppId =  os.Getenv("WECHAT_APPID")
 	// 	client.Config.Secret = ""
 
 	// 	// 配置参数
@@ -150,8 +176,8 @@ func TestOffiAccountAuthorize(t *testing.T) {
 func TestOffiAccountSnsAccessToken(t *testing.T) {
 	// // 创建连接
 	// client := NewClient()
-	// client.Config.AppId = "wx23333bea7abf4245"
-	// client.Config.Secret = "efd93e41df66f343b90c42e0ce383eb2"
+	// client.Config.AppId = os.Getenv("WECHAT_APPID")
+	// client.Config.Secret =  os.Getenv("WECHAT_APPID")
 
 	// // 配置参数
 	// request := requests.NewCommonRequest()
