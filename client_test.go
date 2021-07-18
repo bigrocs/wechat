@@ -99,7 +99,7 @@ func TestMchPayRefund(t *testing.T) {
 	request.ApiName = "pay.refund"
 	request.QueryParams = map[string]interface{}{
 		"out_trade_no":  "20200210000715",
-		"out_refund_no": "20200210000715" + "1",
+		"out_refund_no": "20200210000715" + "2",
 		"total_fee":     "2",
 		"refund_fee":    "1",
 	}
