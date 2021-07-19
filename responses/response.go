@@ -28,7 +28,7 @@ const (
 	CLOSED     = "CLOSED"     // -1 订单关闭
 	USERPAYING = "USERPAYING" // 0	订单支付中
 	SUCCESS    = "SUCCESS"    // 1	订单支付成功
-	WAIT       = "WAIT"       // 2	系统执行中请等待
+	WAITING    = "WAITING"    // 2	系统执行中请等待
 )
 
 // CommonResponse 公共回应
@@ -100,7 +100,7 @@ func (res *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
 // 	content			//	第三方返回内容 	{}
 // 	return_code		//	返回代码 		SUCCESS
 // 	return_msg		//	返回消息		支付失败
-// 	stauts			//	下单状态 		【SUCCESS成功、CLOSED关闭、USERPAYING等待用户付款、WAIT系统繁忙稍后查询】
+// 	status			//	下单状态 		【SUCCESS成功、CLOSED关闭、USERPAYING等待用户付款、WAITING系统繁忙稍后查询】
 // 	total_fee		//  订单金额		88
 // 	refund_fee 		//  退款金额		10
 // 	trade_no 		// 	渠道交易编号 	2013112011001004330000121536
@@ -141,12 +141,12 @@ func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
 // handerWechatTradePay
 func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
 	data := mxj.New()
-	data["stauts"] = "" // 状态
+	data["status"] = "" // 状态
 	data["return_msg"] = content["return_msg"]
 	if content["return_code"] == "SUCCESS" {
 		if content["result_code"] == "SUCCESS" {
 			data["return_code"] = SUCCESS
-			data["stauts"] = SUCCESS
+			data["status"] = SUCCESS
 			data["total_fee"] = content["total_fee"]
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
@@ -176,28 +176,28 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 	// ACCEPT--已接收，等待扣款
 	// 支付状态机请见下单API页面
 	data := mxj.New()
-	data["stauts"] = "" // 状态
+	data["status"] = "" // 状态
 	data["return_msg"] = content["return_msg"]
 	if content["return_code"] == "SUCCESS" {
 		if content["result_code"] == "SUCCESS" {
 			data["return_code"] = SUCCESS
 			switch content["trade_state"] {
 			case "SUCCESS":
-				data["stauts"] = SUCCESS
+				data["status"] = SUCCESS
 			case "REFUND":
-				data["stauts"] = SUCCESS
+				data["status"] = SUCCESS
 			case "NOTPAY":
-				data["stauts"] = USERPAYING
+				data["status"] = USERPAYING
 			case "CLOSED":
-				data["stauts"] = CLOSED
+				data["status"] = CLOSED
 			case "REVOKED":
-				data["stauts"] = CLOSED
+				data["status"] = CLOSED
 			case "USERPAYING":
-				data["stauts"] = USERPAYING
+				data["status"] = USERPAYING
 			case "PAYERROR":
-				data["stauts"] = CLOSED
+				data["status"] = CLOSED
 			case "ACCEPT":
-				data["stauts"] = WAIT
+				data["status"] = WAITING
 			}
 			data["total_fee"] = content["total_fee"]
 			data["trade_no"] = content["transaction_id"]
