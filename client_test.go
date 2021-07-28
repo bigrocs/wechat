@@ -125,8 +125,8 @@ func TestMchPayRefundQuery(t *testing.T) {
 	request.Domain = "mch"
 	request.ApiName = "pay.refundquery"
 	request.QueryParams = map[string]interface{}{
-		"out_trade_no":  "202002100007151",
-		"out_refund_no": "202002100007151" + "_2",
+		"out_trade_no": "2020021000071511A",
+		// "out_refund_no": "202002100007151" + "_1",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)

@@ -259,6 +259,9 @@ func (res *CommonResponse) handerWechatTradeRefundQuery(content mxj.Map) mxj.Map
 			data["out_trade_no"] = content["out_trade_no"]
 			data["out_refund_no"] = content["out_refund_no"]
 		} else {
+			if content["err_code"] == "REFUNDNOTEXIST" {
+				data["status"] = CLOSED
+			}
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
 		}
