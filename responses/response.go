@@ -141,10 +141,9 @@ func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
 // handerWechatTradePay
 func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
 	data := mxj.New()
-	data["status"] = "" // 状态
 	data["return_msg"] = content["return_msg"]
 	if content["return_code"] == "SUCCESS" {
-		if content["result_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" && content["trade_type"] == "MICROPAY" {
 			data["return_code"] = SUCCESS
 			data["status"] = SUCCESS
 			data["total_fee"] = content["total_fee"]
@@ -176,7 +175,6 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 	// ACCEPT--已接收，等待扣款
 	// 支付状态机请见下单API页面
 	data := mxj.New()
-	data["status"] = "" // 状态
 	data["return_msg"] = content["return_msg"]
 	if content["return_code"] == "SUCCESS" {
 		if content["result_code"] == "SUCCESS" {
@@ -245,6 +243,16 @@ func (res *CommonResponse) handerWechatTradeRefundQuery(content mxj.Map) mxj.Map
 	if content["return_code"] == "SUCCESS" {
 		if content["result_code"] == "SUCCESS" {
 			data["return_code"] = SUCCESS
+			switch content["refund_status_0"] {
+			case "SUCCESS":
+				data["status"] = SUCCESS
+			case "PROCESSING":
+				data["status"] = USERPAYING
+			case "REFUNDCLOSE":
+				data["status"] = CLOSED
+			case "CHANGE":
+				data["status"] = CLOSED
+			}
 			data["total_fee"] = content["total_fee"]
 			data["refund_fee"] = content["refund_fee"]
 			data["trade_no"] = content["transaction_id"]

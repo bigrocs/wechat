@@ -11,8 +11,8 @@ import (
 func TestCode2Session(t *testing.T) {
 	// 创建连接
 	// client := NewClient()
-	// client.Config.AppId =  os.Getenv("WECHAT_APPID")
-	// client.Config.Secret =  os.Getenv("WECHAT_APPID")
+	// client.Config.AppId =  os.Getenv("PAY_WECHAT_APPID")
+	// client.Config.Secret =  os.Getenv("PAY_WECHAT_APPID")
 	// client.Config.SignType = "MD5"
 
 	// // 配置参数
@@ -33,20 +33,20 @@ func TestCode2Session(t *testing.T) {
 func TestMchPayMicropay(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = os.Getenv("WECHAT_APPID")
-	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
-	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
-	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
-	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
+	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
+	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
+	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
 
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.micropay"
 	request.QueryParams = map[string]interface{}{
-		"auth_code":        "136539919261043694",
+		"auth_code":        "136600581409816083",
 		"body":             "测试商品名称1",
-		"out_trade_no":     "20200210000715",
+		"out_trade_no":     "202002100007151",
 		"total_fee":        "2",
 		"spbill_create_ip": "127.0.0.1",
 	}
@@ -61,11 +61,11 @@ func TestMchPayMicropay(t *testing.T) {
 func TestMchPayOrderQuery(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = os.Getenv("WECHAT_APPID")
-	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
-	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
-	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
-	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
+	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
+	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
+	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
 
 	// 配置参数
 	request := requests.NewCommonRequest()
@@ -85,21 +85,21 @@ func TestMchPayOrderQuery(t *testing.T) {
 func TestMchPayRefund(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = os.Getenv("WECHAT_APPID")
-	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
-	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
-	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
-	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
+	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
+	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
+	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
 	// client.Config.CA = "/apiclient_cert.p12"
-	client.Config.PemCert = os.Getenv("WECHAT_PEM_CERT")
-	client.Config.PemKey = os.Getenv("WECHAT_PEM_KEY")
+	client.Config.PemCert = os.Getenv("PAY_WECHAT_PEMCERT")
+	client.Config.PemKey = os.Getenv("PAY_WECHAT_PEMKEY")
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.refund"
 	request.QueryParams = map[string]interface{}{
-		"out_trade_no":  "20200210000715",
-		"out_refund_no": "20200210000715" + "2",
+		"out_trade_no":  "202002100007151",
+		"out_refund_no": "202002100007151" + "_2",
 		"total_fee":     "2",
 		"refund_fee":    "1",
 	}
@@ -112,21 +112,21 @@ func TestMchPayRefund(t *testing.T) {
 func TestMchPayRefundQuery(t *testing.T) {
 	// 创建连接
 	client := NewClient()
-	client.Config.AppId = os.Getenv("WECHAT_APPID")
-	client.Config.MchId = os.Getenv("WECHAT_MCH_ID")
-	client.Config.ApiKey = os.Getenv("WECHAT_API_KEY")
-	// client.Config.SubAppId = os.Getenv("WECHAT_SUB_APP_ID")
-	client.Config.SubMchId = os.Getenv("WECHAT_SUB_MCH_ID")
+	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
+	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
+	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
 	// client.Config.CA = "/apiclient_cert.p12"
-	client.Config.PemCert = os.Getenv("WECHAT_PEM_CERT")
-	client.Config.PemKey = os.Getenv("WECHAT_PEM_KEY")
+	client.Config.PemCert = os.Getenv("PAY_WECHAT_PEMCERT")
+	client.Config.PemKey = os.Getenv("PAY_WECHAT_PEMKEY")
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "pay.refundquery"
 	request.QueryParams = map[string]interface{}{
-		"out_trade_no":  "20200210000715",
-		"out_refund_no": "20200210000715" + "1",
+		"out_trade_no":  "202002100007151",
+		"out_refund_no": "202002100007151" + "_2",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
@@ -137,8 +137,8 @@ func TestMchPayRefundQuery(t *testing.T) {
 func TestOffiAccountAccessToken(t *testing.T) {
 	// 创建连接
 	// client := NewClient()
-	// client.Config.AppId =  os.Getenv("WECHAT_APPID")
-	// client.Config.Secret =  os.Getenv("WECHAT_APPID")
+	// client.Config.AppId =  os.Getenv("PAY_WECHAT_APPID")
+	// client.Config.Secret =  os.Getenv("PAY_WECHAT_APPID")
 
 	// // 配置参数
 	// request := requests.NewCommonRequest()
@@ -155,7 +155,7 @@ func TestOffiAccountAccessToken(t *testing.T) {
 func TestOffiAccountAuthorize(t *testing.T) {
 	// 创建连接
 	// 	client := NewClient()
-	// 	client.Config.AppId =  os.Getenv("WECHAT_APPID")
+	// 	client.Config.AppId =  os.Getenv("PAY_WECHAT_APPID")
 	// 	client.Config.Secret = ""
 
 	// 	// 配置参数
@@ -176,8 +176,8 @@ func TestOffiAccountAuthorize(t *testing.T) {
 func TestOffiAccountSnsAccessToken(t *testing.T) {
 	// // 创建连接
 	// client := NewClient()
-	// client.Config.AppId = os.Getenv("WECHAT_APPID")
-	// client.Config.Secret =  os.Getenv("WECHAT_APPID")
+	// client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+	// client.Config.Secret =  os.Getenv("PAY_WECHAT_APPID")
 
 	// // 配置参数
 	// request := requests.NewCommonRequest()
