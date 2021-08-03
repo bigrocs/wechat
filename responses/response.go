@@ -132,6 +132,9 @@ func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
 	if res.Request.ApiName == "pay.refundquery" {
 		data = res.handerWechatTradeRefundQuery(content)
 	}
+	if res.Request.ApiName == "tools.authcodetoopenid" {
+		data = res.handerWechatQueryOpenId(content)
+	}
 
 	data["channel"] = "wechat" //渠道
 	data["content"] = content
@@ -202,6 +205,7 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 			data["out_trade_no"] = content["out_trade_no"]
 			data["wechat_is_subscribe"] = content["is_subscribe"]
 			data["wechat_open_id"] = content["openid"]
+			data["wechat_sub_open_id"] = content["sub_openid"]
 			data["time_end"] = content["time_end"]
 		} else {
 			data["return_code"] = "FAIL"
@@ -258,6 +262,28 @@ func (res *CommonResponse) handerWechatTradeRefundQuery(content mxj.Map) mxj.Map
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
 			data["out_refund_no"] = content["out_refund_no"]
+		} else {
+			if content["err_code"] == "REFUNDNOTEXIST" {
+				data["status"] = CLOSED
+			}
+			data["return_code"] = "FAIL"
+			data["return_msg"] = content["err_code_des"]
+		}
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data
+}
+
+// handerWechatQueryOpenId
+func (res *CommonResponse) handerWechatQueryOpenId(content mxj.Map) mxj.Map {
+	data := mxj.New()
+	data["return_msg"] = content["return_msg"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			data["wechat_open_id"] = content["openid"]
+			data["wechat_sub_open_id"] = content["sub_openid"]
 		} else {
 			if content["err_code"] == "REFUNDNOTEXIST" {
 				data["status"] = CLOSED
