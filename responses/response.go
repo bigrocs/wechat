@@ -108,8 +108,8 @@ func (res *CommonResponse) SetHttpContent(httpContent []byte, dataType string) {
 //  out_refund_no	//  商户退款单号	T1024501231476_T
 // 	wechat_open_id		//  微信openid		[oUpF8uN95-Ptaags6E_roPHg7AG
 //  wechat_is_subscribe 	//  微信是否微信关注公众号
-// 	alipay_buyer_logon_id  //	支付宝账号		158****1562
-//  alipay_buyer_user_id  //	买家在支付宝的用户id	2088101117955611
+// 	alipay_logon_id  //	支付宝账号		158****1562
+//  alipay_user_id  //	买家在支付宝的用户id	2088101117955611
 // 	time_end		//  支付完成时间	20141030133525
 // }
 
