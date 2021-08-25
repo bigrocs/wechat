@@ -208,6 +208,9 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 			data["wechat_sub_open_id"] = content["sub_openid"]
 			data["time_end"] = content["time_end"]
 		} else {
+			if content["err_code"] == "ORDERNOTEXIST" {
+				data["status"] = CLOSED
+			}
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
 		}
@@ -285,9 +288,6 @@ func (res *CommonResponse) handerWechatQueryOpenId(content mxj.Map) mxj.Map {
 			data["wechat_open_id"] = content["openid"]
 			data["wechat_sub_open_id"] = content["sub_openid"]
 		} else {
-			if content["err_code"] == "REFUNDNOTEXIST" {
-				data["status"] = CLOSED
-			}
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
 		}
