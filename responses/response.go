@@ -150,6 +150,11 @@ func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
 			data["return_code"] = SUCCESS
 			data["status"] = SUCCESS
 			data["total_fee"] = content["total_fee"]
+			if v, ok := content["cash_fee"]; ok { // 用户实际扣减金额
+				data["buyer_pay_fee"] = v
+			} else {
+				data["buyer_pay_fee"] = content["total_fee"]
+			}
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
 			data["wechat_is_subscribe"] = content["is_subscribe"]
@@ -201,6 +206,11 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 				data["status"] = WAITING
 			}
 			data["total_fee"] = content["total_fee"]
+			if v, ok := content["cash_fee"]; ok { // 用户实际扣减金额
+				data["buyer_pay_fee"] = v
+			} else {
+				data["buyer_pay_fee"] = content["total_fee"]
+			}
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
 			data["wechat_is_subscribe"] = content["is_subscribe"]
