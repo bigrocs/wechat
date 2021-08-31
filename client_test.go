@@ -44,10 +44,10 @@ func TestMchPayMicropay(t *testing.T) {
 	request.Domain = "mch"
 	request.ApiName = "pay.micropay"
 	request.QueryParams = map[string]interface{}{
-		"auth_code":        "136600581409816083",
+		"auth_code":        "136568132728838095",
 		"body":             "测试商品名称1",
-		"out_trade_no":     "202002100007151",
-		"total_fee":        "2",
+		"out_trade_no":     "202002100007156",
+		"total_fee":        "1",
 		"spbill_create_ip": "127.0.0.1",
 	}
 	// 请求
@@ -98,9 +98,9 @@ func TestMchPayRefund(t *testing.T) {
 	request.Domain = "mch"
 	request.ApiName = "pay.refund"
 	request.QueryParams = map[string]interface{}{
-		"out_trade_no":  "202002100007151",
-		"out_refund_no": "202002100007151" + "_2",
-		"total_fee":     "2",
+		"out_trade_no":  "202002100007156",
+		"out_refund_no": "202002100007156" + "_2",
+		"total_fee":     "1",
 		"refund_fee":    "1",
 	}
 	// 请求

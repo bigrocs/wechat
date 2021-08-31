@@ -17,6 +17,7 @@ package responses
 import (
 	"encoding/json"
 	"errors"
+	"strconv"
 
 	"github.com/bigrocs/wechat/config"
 	"github.com/bigrocs/wechat/requests"
@@ -149,11 +150,13 @@ func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
 		if content["result_code"] == "SUCCESS" && content["trade_type"] == "MICROPAY" {
 			data["return_code"] = SUCCESS
 			data["status"] = SUCCESS
-			data["total_fee"] = content["total_fee"]
+			total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
+			data["total_fee"] = total_fee
 			if v, ok := content["cash_fee"]; ok { // 用户实际扣减金额
-				data["buyer_pay_fee"] = v
+				i, _ := strconv.ParseInt(v.(string), 10, 64)
+				data["buyer_pay_fee"] = i
 			} else {
-				data["buyer_pay_fee"] = content["total_fee"]
+				data["buyer_pay_fee"] = total_fee
 			}
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
@@ -205,11 +208,13 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 			case "ACCEPT":
 				data["status"] = WAITING
 			}
-			data["total_fee"] = content["total_fee"]
+			total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
+			data["total_fee"] = total_fee
 			if v, ok := content["cash_fee"]; ok { // 用户实际扣减金额
-				data["buyer_pay_fee"] = v
+				i, _ := strconv.ParseInt(v.(string), 10, 64)
+				data["buyer_pay_fee"] = i
 			} else {
-				data["buyer_pay_fee"] = content["total_fee"]
+				data["buyer_pay_fee"] = total_fee
 			}
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
@@ -239,8 +244,10 @@ func (res *CommonResponse) handerWechatTradeRefund(content mxj.Map) mxj.Map {
 	if content["return_code"] == "SUCCESS" {
 		if content["result_code"] == "SUCCESS" {
 			data["return_code"] = SUCCESS
-			data["total_fee"] = content["total_fee"]
-			data["refund_fee"] = content["refund_fee"]
+			total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
+			data["total_fee"] = total_fee
+			refund_fee, _ := strconv.ParseInt(content["refund_fee"].(string), 10, 64)
+			data["refund_fee"] = refund_fee
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
 			data["out_refund_no"] = content["out_refund_no"]
@@ -271,8 +278,10 @@ func (res *CommonResponse) handerWechatTradeRefundQuery(content mxj.Map) mxj.Map
 			case "CHANGE":
 				data["status"] = CLOSED
 			}
-			data["total_fee"] = content["total_fee"]
-			data["refund_fee"] = content["refund_fee"]
+			total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
+			data["total_fee"] = total_fee
+			refund_fee, _ := strconv.ParseInt(content["refund_fee"].(string), 10, 64)
+			data["refund_fee"] = refund_fee
 			data["trade_no"] = content["transaction_id"]
 			data["out_trade_no"] = content["out_trade_no"]
 			data["out_refund_no"] = content["out_refund_no"]
