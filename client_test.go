@@ -261,3 +261,65 @@ func TestOffiAccountMessageTemplate(t *testing.T) {
 	// t.Log(response, err)
 	// t.Log(req, err)
 }
+
+func TestMchPayJsapi(t *testing.T) {
+	// 创建连接
+	client := NewClient()
+	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
+	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
+	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
+
+	// 配置参数
+	request := requests.NewCommonRequest()
+	request.Domain = "mch"
+	request.ApiName = "pay.unifiedorder"
+	request.QueryParams = map[string]interface{}{
+		"body":             "测试商品名称1",
+		"out_trade_no":     "202002100007156",
+		"total_fee":        "1",
+		"spbill_create_ip": "127.0.0.1",
+		"trade_type":       "JSAPI",
+		// "openid":           "",
+		// "sub_openid":       "",
+		"notify_url": "http://www.xilewanggou.com",
+	}
+	// 请求
+	response, err := client.ProcessCommonRequest(request)
+	req, err := response.GetVerifySignDataMap()
+	// fmt.Println(response, err)
+	fmt.Println("TestMchPayMicropay_____", req, err)
+	t.Log(req, err)
+}
+
+// func TestMchPayNative(t *testing.T) {
+// 	// 创建连接
+// 	client := NewClient()
+// 	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
+// 	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
+// 	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
+// 	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+// 	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
+
+// 	// 配置参数
+// 	request := requests.NewCommonRequest()
+// 	request.Domain = "mch"
+// 	request.ApiName = "pay.unifiedorder"
+// 	request.QueryParams = map[string]interface{}{
+// 		"body":             "测试商品名称1",
+// 		"out_trade_no":     "2020021000071561",
+// 		"total_fee":        "1",
+// 		"spbill_create_ip": "127.0.0.1",
+// 		"trade_type":       "NATIVE",
+// 		// "openid":           "",
+// 		// "sub_openid":       "",
+// 		"notify_url": "http://www.xilewanggou.com",
+// 	}
+// 	// 请求
+// 	response, err := client.ProcessCommonRequest(request)
+// 	req, err := response.GetVerifySignDataMap()
+// 	// fmt.Println(response, err)
+// 	fmt.Println("TestMchPayNative_____", req, err)
+// 	t.Log(req, err)
+// }

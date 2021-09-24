@@ -24,8 +24,11 @@ func (c *Common) Action(response *responses.CommonResponse) (err error) {
 		h := &Miniprogram{c}
 		err = h.Request(response)
 	case "mch": // 微信商户平台(微信支付) SDK
-		// 小程序
 		h := &Mch{c}
+		err = h.Request(response)
+	case "openplatform": // 开发平台
+		// 小程序
+		h := &Openplatform{c}
 		err = h.Request(response)
 	}
 	return

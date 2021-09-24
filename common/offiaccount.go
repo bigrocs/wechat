@@ -1,4 +1,4 @@
-// 微信小g公众号
+// 微信公众号
 package common
 
 import (
