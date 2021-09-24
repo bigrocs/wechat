@@ -211,8 +211,9 @@ func (res *CommonResponse) handerWechatTradeQuery(content mxj.Map) mxj.Map {
 			case "ACCEPT":
 				data["status"] = WAITING
 			}
+			total_fee = int64(0)
 			if v, ok := content["total_fee"]; ok { // 用户实际扣减金额
-				total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
+				total_fee, _ = strconv.ParseInt(content["total_fee"].(string), 10, 64)
 				data["total_fee"] = total_fee
 			}
 			if v, ok := content["cash_fee"]; ok { // 用户实际扣减金额
