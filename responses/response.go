@@ -147,7 +147,7 @@ func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
 	data := mxj.New()
 	data["return_msg"] = content["return_msg"]
 	if content["return_code"] == "SUCCESS" {
-		if content["result_code"] == "SUCCESS" && content["trade_type"] == "MICROPAY" {
+		if content["result_code"] == "SUCCESS" {
 			data["return_code"] = SUCCESS
 			data["status"] = SUCCESS
 			total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
