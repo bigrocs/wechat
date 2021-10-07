@@ -6,6 +6,7 @@ import (
 
 	"github.com/bigrocs/wechat/responses"
 	"github.com/bigrocs/wechat/util"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 var apiUrlsMch = map[string]string{
@@ -75,6 +76,8 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	if err != nil {
 		return err
 	}
+	log.Info("Wechat[PostXML]", apiUrl, req.QueryParams)
+	log.Info("Wechat[PostXML]res", string(res))
 	response.SetHttpContent(res, "xml")
 	return
 }
