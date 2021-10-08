@@ -68,6 +68,7 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 		return err
 	}
 	var res []byte
+	log.Info("Wechat[PostXML]", apiUrl, req.QueryParams)
 	if req.ApiName == "pay.reverse" || req.ApiName == "pay.refund" || req.ApiName == "pay.downloadfundflow" || req.ApiName == "billcommentsp.batchquerycomment" { //  判断是否使用证书
 		res, err = util.PostXMLWithTLS(apiUrl, req.QueryParams, c.CA, req.QueryParams["mch_id"].(string), c.PemCert, c.PemKey)
 	} else {
@@ -76,7 +77,6 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	if err != nil {
 		return err
 	}
-	log.Info("Wechat[PostXML]", apiUrl, req.QueryParams)
 	log.Info("Wechat[PostXML]res", string(res))
 	response.SetHttpContent(res, "xml")
 	return
