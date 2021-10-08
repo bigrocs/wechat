@@ -74,10 +74,10 @@ func (m *Mch) Request(response *responses.CommonResponse) (err error) {
 	} else {
 		res, err = util.PostXML(apiUrl, req.QueryParams)
 	}
+	log.Info("Wechat[PostXML]res", string(res), err)
 	if err != nil {
 		return err
 	}
-	log.Info("Wechat[PostXML]res", string(res))
 	response.SetHttpContent(res, "xml")
 	return
 }
