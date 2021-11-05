@@ -167,7 +167,6 @@ func (res *CommonResponse) handerWechatTradePay(content mxj.Map) mxj.Map {
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
 			if content["return_code"] == "USERPAYING" {
-				data["return_code"] = SUCCESS
 				data["status"] = USERPAYING
 			}
 		}
