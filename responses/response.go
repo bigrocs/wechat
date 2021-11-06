@@ -261,6 +261,7 @@ func (res *CommonResponse) handerWechatTradeRefund(content mxj.Map) mxj.Map {
 		} else {
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
+			data["status"] = WAITING
 		}
 	} else {
 		data["return_code"] = "FAIL"
