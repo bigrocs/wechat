@@ -250,7 +250,7 @@ func (res *CommonResponse) handerWechatTradeRefund(content mxj.Map) mxj.Map {
 	if content["return_code"] == "SUCCESS" {
 		if content["result_code"] == "SUCCESS" {
 			data["return_code"] = SUCCESS
-			data["status"] = WAITING
+			data["status"] = USERPAYING
 			total_fee, _ := strconv.ParseInt(content["total_fee"].(string), 10, 64)
 			data["total_fee"] = total_fee
 			refund_fee, _ := strconv.ParseInt(content["refund_fee"].(string), 10, 64)
@@ -261,7 +261,7 @@ func (res *CommonResponse) handerWechatTradeRefund(content mxj.Map) mxj.Map {
 		} else {
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
-			data["status"] = WAITING
+			data["status"] = USERPAYING
 		}
 	} else {
 		data["return_code"] = "FAIL"
