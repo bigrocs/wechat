@@ -73,7 +73,11 @@ func (res *CommonResponse) GetVerifySignDataMap() (m mxj.Map, err error) {
 			return r, errors.New("sign verification failed")
 		}
 	} else {
-		return r, errors.New("sign is not")
+		if v, ok := r["return_msg"]; ok {
+			return r, errors.New(v.(string))
+		} else {
+			return r, errors.New("res sign is not")
+		}
 	}
 }
 

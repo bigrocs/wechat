@@ -143,14 +143,14 @@ func TestQueryOpenid(t *testing.T) {
 	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
 	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
 	// client.Config.CA = "/apiclient_cert.p12"
-	client.Config.PemCert = os.Getenv("PAY_WECHAT_PEMCERT")
-	client.Config.PemKey = os.Getenv("PAY_WECHAT_PEMKEY")
+	// client.Config.PemCert = os.Getenv("PAY_WECHAT_PEMCERT")
+	// client.Config.PemKey = os.Getenv("PAY_WECHAT_PEMKEY")
 	// 配置参数
 	request := requests.NewCommonRequest()
 	request.Domain = "mch"
 	request.ApiName = "tools.authcodetoopenid"
 	request.QueryParams = map[string]interface{}{
-		"auth_code": "136612636574445977",
+		"auth_code": "136709711919965427",
 		// "out_refund_no": "202002100007151" + "_1",
 	}
 	// 请求
