@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"errors"
 	"strconv"
+	"time"
 
 	"github.com/bigrocs/wechat/config"
 	"github.com/bigrocs/wechat/requests"
@@ -127,6 +128,9 @@ func (res *CommonResponse) GetSignDataMap() (mxj.Map, error) {
 	}
 	if res.Request.ApiName == "pay.micropay" {
 		data = res.handerWechatTradePay(content)
+	}
+	if res.Request.ApiName == "pay.unifiedorder" {
+		data = res.handerWechatTradeUnifiedorder(content)
 	}
 	if res.Request.ApiName == "pay.orderquery" {
 		data = res.handerWechatTradeQuery(content)
@@ -324,6 +328,65 @@ func (res *CommonResponse) handerWechatQueryOpenId(content mxj.Map) mxj.Map {
 			data["return_code"] = "FAIL"
 			data["return_msg"] = content["err_code_des"]
 		}
+	} else {
+		data["return_code"] = "FAIL"
+	}
+	return data
+}
+
+// map[appid:wxb6f76f399a3e7561
+// body:余额充值 mch_id:1407796102
+// nonce_str:619e5da3ee08c2396d2786247f694385
+// notify_url:http://127.0.0.1/wechat openid:
+// out_trade_no:2022032920252088250
+// sign:35D38455F958E6A12203571D2E2C2DCE
+// spbill_create_ip:127.0.0.1 sub_appid:wx88c19e4bdb3d47b3
+// sub_mch_id:1617683522 sub_openid:oLwqC4ovzaXd67D7c8LgANDeo7M8
+// time_expire:20220329202720 time_start:20220329202520
+// total_fee:900 trade_type:JSAPI]]
+
+// <xml><return_code><![CDATA[SUCCESS]]></return_code>
+// <return_msg><![CDATA[OK]]></return_msg>
+// <result_code><![CDATA[SUCCESS]]></result_code>
+// <mch_id><![CDATA[1407796102]]></mch_id>
+// <appid><![CDATA[wxb6f76f399a3e7561]]></appid>
+// <sub_mch_id><![CDATA[1617683522]]></sub_mch_id>
+// <sub_appid><![CDATA[wx88c19e4bdb3d47b3]]></sub_appid>
+// <nonce_str><![CDATA[T0qu81ktze1Fil1y]]></nonce_str>
+// <sign><![CDATA[23E3939032190F28818F644F1CAED2BD]]></sign>
+// <prepay_id><![CDATA[wx29202521258478842da73afe1409e20000]]></prepay_id>
+// <trade_type><![CDATA[JSAPI]]></trade_type>
+// </xml>
+func (res *CommonResponse) handerWechatTradeUnifiedorder(content mxj.Map) mxj.Map {
+	data := mxj.New()
+	data["return_msg"] = content["return_msg"]
+	if content["return_code"] == "SUCCESS" {
+		if content["result_code"] == "SUCCESS" {
+			data["return_code"] = SUCCESS
+			data["status"] = USERPAYING
+			data["total_fee"] = res.Request.QueryParams["total_fee"]
+			data["out_trade_no"] = res.Request.QueryParams["out_trade_no"]
+			if v, ok := content["prepay_id"]; ok {
+				data["prepay_id"] = v
+				wechatPackage := map[string]interface{}{
+					"appId":     content["appid"],
+					"nonceStr":  content["nonce_str"],
+					"package":   "prepay_id=" + content["prepay_id"].(string),
+					"signType":  "MD5",
+					"timeStamp": time.Now().Unix(),
+				}
+				wechatPackage["paySign"] = util.Sign(wechatPackage, res.Config.ApiKey, "MD5")
+				wechatPackageJson, _ := json.Marshal(wechatPackage)
+				data["wechat_package"] = string(wechatPackageJson)
+			}
+		} else {
+			data["return_code"] = "FAIL"
+			data["return_msg"] = content["err_code_des"]
+			if content["err_code"] == "USERPAYING" {
+				data["status"] = USERPAYING
+			}
+		}
+
 	} else {
 		data["return_code"] = "FAIL"
 	}

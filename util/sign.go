@@ -74,7 +74,6 @@ func Sign2(params map[string]interface{}, apiKey string, h hash.Hash) string {
 	bufw.WriteString("key=")
 	bufw.WriteString(apiKey)
 	bufw.Flush()
-
 	signature := make([]byte, hex.EncodedLen(h.Size()))
 	hex.Encode(signature, h.Sum(nil))
 	return string(bytes.ToUpper(signature))

@@ -268,7 +268,7 @@ func TestMchPayJsapi(t *testing.T) {
 	client.Config.AppId = os.Getenv("PAY_WECHAT_APPID")
 	client.Config.MchId = os.Getenv("PAY_WECHAT_MCHID")
 	client.Config.ApiKey = os.Getenv("PAY_WECHAT_APIKEY")
-	// client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APP_ID")
+	client.Config.SubAppId = os.Getenv("PAY_WECHAT_SUB_APPID")
 	client.Config.SubMchId = os.Getenv("PAY_WECHAT_SUB_MCHID")
 
 	// 配置参数
@@ -276,14 +276,13 @@ func TestMchPayJsapi(t *testing.T) {
 	request.Domain = "mch"
 	request.ApiName = "pay.unifiedorder"
 	request.QueryParams = map[string]interface{}{
-		"body":             "测试商品名称1",
-		"out_trade_no":     "202002100007156",
+		"body":             "余额充值测试",
+		"out_trade_no":     "2022032920252088251",
 		"total_fee":        "1",
 		"spbill_create_ip": "127.0.0.1",
 		"trade_type":       "JSAPI",
-		// "openid":           "",
-		// "sub_openid":       "",
-		"notify_url": "http://www.xilewanggou.com",
+		"sub_openid":       "oLwqC4ovzaXd67D7c8LgANDeo7M8",
+		"notify_url":       "http://127.0.0.1/wechat",
 	}
 	// 请求
 	response, err := client.ProcessCommonRequest(request)
