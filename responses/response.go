@@ -368,8 +368,12 @@ func (res *CommonResponse) handerWechatTradeUnifiedorder(content mxj.Map) mxj.Ma
 			data["out_trade_no"] = res.Request.QueryParams["out_trade_no"]
 			if v, ok := content["prepay_id"]; ok {
 				data["prepay_id"] = v
+				appid := content["appid"]
+				if v, ok := content["sub_appid"]; ok {
+					appid = v
+				}
 				wechatPackage := map[string]interface{}{
-					"appId":     content["appid"],
+					"appId":     appid,
 					"nonceStr":  content["nonce_str"],
 					"package":   "prepay_id=" + content["prepay_id"].(string),
 					"signType":  "MD5",
