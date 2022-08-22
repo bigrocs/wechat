@@ -89,9 +89,9 @@ func InterfaceToString(v interface{}) string {
 	case int64:
 		return strconv.FormatInt(v.(int64), 10)
 	case float32:
-		return strconv.FormatFloat(v.(float64), 'E', -1, 32)
+		return strconv.FormatFloat(v.(float64), 'f', -1, 32)
 	case float64:
-		return strconv.FormatFloat(v.(float64), 'E', -1, 64)
+		return strconv.FormatFloat(v.(float64), 'f', -1, 64)
 	}
 	return ""
 }
